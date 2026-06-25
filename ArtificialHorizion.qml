@@ -16,10 +16,10 @@ Item {
 
         Rectangle { id: sky; color: "#0689e4"; width: root.width; height: root.height/2}
         Rectangle { id: ground; color: "#A66b26"; width: root.width; height: root.height/2 }
-        transform {
-            Rotation { origin.x: root.width/2; origin.y: root.height/2; angle: roll }
+        transform: [
+            Rotation { origin.x: root.width/2; origin.y: root.height/2; angle: roll },
             Translate { y: y + calcHorizonShift(pitch) }
-        }
+        ]
     }
 
     Item {
@@ -128,6 +128,6 @@ Item {
 
     function calcHorizonShift (pitch) {
         // 40 pixels = 10 degrees pitch
-        return pitchLadder.spacing * pitch
+        return 4 * pitch
     }
 }
