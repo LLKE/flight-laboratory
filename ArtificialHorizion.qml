@@ -32,58 +32,69 @@ Item {
             Rectangle {
 
                 width: 2 * root.width/9
-                height: 3
+                height: 5
             }
 
             Rectangle {
 
                 width: 2* root.width/9
-                height: 3
+                height: 5
             }
         }
     }
 
-    Item {
-        id: pitchIndicationUnit
+    Column {
+        id: pitchLadder
+        spacing: 20
 
-        property real angleIndication
-
-        width: root.width
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
-        anchors.verticalCenterOffset: -55
+        anchors.verticalCenterOffset: -120
 
-        ColumnLayout {
-            spacing: 10
-            anchors.fill: parent
+        Repeater {
 
-            RowLayout {
-                anchors.horizontalCenter: parent.horizontalCenter
-                id: markedIndicationLine
-                spacing: 20
-                Layout.alignment: Qt.AlignHCenter
+            model: ["30", "20", "10"]
 
-                Text {
-                    text: pitchIndicationUnit.angleIndication
-                    color: "white"
+            Item {
+                id: pitchIndicationUnit
+
+                width: mainLayout.implicitWidth
+                height: 10
+
+                ColumnLayout {
+                    id: mainLayout
+                    spacing: 10
+                    anchors.fill: parent
+
+                    RowLayout {
+
+                        id: markedIndicationLine
+                        spacing: 20
+                        Layout.alignment: Qt.AlignHCenter
+
+                        Text {
+                            text: modelData
+                            color: "white"
+                        }
+
+                        Rectangle {
+                            width: 2 * root.width/9
+                            height: 1
+                            color: "white"
+                        }
+
+                        Text {
+                            text: modelData
+                            color: "white"
+                        }
+                    }
+
+                    Rectangle {
+                        Layout.preferredWidth: root.width/9
+                        height: 1
+                        Layout.alignment: Qt.AlignHCenter
+                    }
                 }
-
-                Rectangle {
-                    width: 2 * root.width/9
-                    height: 1
-                    color: "white"
-                }
-
-                Text {
-                    text: pitchIndicationUnit.angleIndication
-                    color: "white"
-                }
-            }
-
-            Rectangle {
-                Layout.preferredWidth: root.width/9
-                height: 1
-                Layout.alignment: Qt.AlignHCenter
             }
         }
     }
