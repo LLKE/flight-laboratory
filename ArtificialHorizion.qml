@@ -1,22 +1,55 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
 
 Item {
     id: root
     visible: true
-    width: 640
-    height: 480
+    width: 300
+    height: 300
 
     property real roll: 0.0
     property real pitch: 0.0
 
-    Column {
-        id: horizon
-        spacing: 0
+    Rectangle {
+        id: instrumentDial
+        anchors.fill: parent
+        radius: width/2
 
-        Rectangle { id: sky; color: "#0689e4"; width: root.width; height: root.height/2 + calcHorizonShift(pitch)}
-        Rectangle { id: ground; color: "#A66b26"; width: root.width; height: root.height - sky.height}
-        transform: Rotation { origin.x: root.width/2; origin.y: root.height/2; angle: roll }
+        Canvas {
+            anchors.fill: parent
+
+            onPaint: {
+                var ctx = getContext("2d");
+
+                ctx.clearRect(0, 0, width, height);
+
+                // Circular viewport
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(width/2, height/2, width/2, 0, 2*Math.PI);
+                ctx.clip();
+
+                // Move origin to centre
+                ctx.translate(width/2, height/2);
+
+                // Roll
+                ctx.rotate(roll * Math.PI / 180);
+
+                // Pitch
+                ctx.translate(0, pitch * 4);
+
+                // Draw sky
+                ctx.fillStyle = "#0689e4";
+                ctx.fillRect(-width, -height*2, width*2, height*2);
+
+                // Draw ground
+                ctx.fillStyle = "#A66b26";
+                ctx.fillRect(-width, 0, width*2, height*2);
+
+                ctx.restore();
+            }
+        }
     }
 
     Item {

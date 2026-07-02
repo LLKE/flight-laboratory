@@ -26,7 +26,7 @@ ApplicationWindow {
         }
 
         pitch: -10
-        roll: 0
+        roll: 5
     }
 
 }
