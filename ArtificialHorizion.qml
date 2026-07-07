@@ -5,8 +5,8 @@ import QtQuick.Effects
 Item {
     id: root
     visible: true
-    width: 300
-    height: 300
+    width: 350
+    height: 350
 
     property real roll: 0.0
     property real pitch: 0.0
@@ -21,6 +21,8 @@ Item {
 
             onPaint: {
                 var ctx = getContext("2d");
+                var bezel_width = 10;
+                var bezel_radius = (width / 2);
 
                 ctx.clearRect(0, 0, width, height);
 
@@ -37,7 +39,7 @@ Item {
                 ctx.rotate(roll * Math.PI / 180);
 
                 // Pitch
-                ctx.translate(0, pitch * 4);
+                ctx.translate(0, calcHorizonShift(pitch));
 
                 // Draw sky
                 ctx.fillStyle = "#0689e4";
@@ -46,6 +48,14 @@ Item {
                 // Draw ground
                 ctx.fillStyle = "#A66b26";
                 ctx.fillRect(-width, 0, width*2, height*2);
+
+                // Draw bezel
+                ctx.beginPath();
+                ctx.arc(0, 0, bezel_radius, 0, 2 * Math.PI, false)
+
+                ctx.lineWidth = bezel_width;
+                ctx.strokeStyle = Qt.rgba(1, 2, 3, 4)
+                ctx.stroke();
 
                 ctx.restore();
             }
@@ -128,7 +138,7 @@ Item {
         }
 
         Text {
-            text: isNegative ? "-" + modelData : modelData
+            text: modelData
             color: "white"
             anchors.verticalCenter: isNegative ? pitchIndicationLines.bottom : pitchIndicationLines.top
             anchors.right: pitchIndicationLines.left
@@ -136,7 +146,7 @@ Item {
         }
 
         Text {
-            text: isNegative ? "-" + modelData : modelData
+            text: modelData
             color: "white"
             anchors.verticalCenter: isNegative ? pitchIndicationLines.bottom : pitchIndicationLines.top
             anchors.left: pitchIndicationLines.right

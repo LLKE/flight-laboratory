@@ -25,8 +25,8 @@ ApplicationWindow {
             horizontalCenter: parent.horizontalCenter
         }
 
-        pitch: -10
-        roll: 5
+        pitch: 0
+        roll: 0
     }
 
 }
