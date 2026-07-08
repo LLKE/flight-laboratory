@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
+import QtQuick.Shapes
 
 Item {
     id: root
@@ -62,6 +63,32 @@ Item {
         }
     }
 
+    Shape {
+        id: rollIndicator
+
+        width: root.width / 10
+        height: root.height / 10
+
+        x: root.width / 2 - rollIndicator.width / 2
+        y: 0
+
+        layer.enabled: true
+        layer.samples: 4
+
+        ShapePath {
+            strokeColor: "white"
+            strokeWidth: 4
+            fillColor: "black"
+
+            startX: rollIndicator.width / 2
+            startY: 0
+
+            PathLine { x: rollIndicator.width; y: rollIndicator.height }
+            PathLine { x: 0; y: rollIndicator.height }
+            PathLine { x: rollIndicator.width / 2; y: 0 }
+        }
+    }
+
     Item {
         id: pipper
         anchors.verticalCenter: root.verticalCenter
@@ -102,6 +129,15 @@ Item {
                 delegate: PitchIndicationComponent { isNegative: true }
             }
         }
+
+        transform: [
+            Rotation {
+                angle: roll
+                origin.x: pitchLadder.width/2
+                origin.y: pitchLadder.height/2
+            }
+
+        ]
     }
 
     component PitchIndicationComponent : Item {
