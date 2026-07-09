@@ -3,6 +3,9 @@ import QtQuick.Layouts
 import QtQuick.Effects
 import QtQuick.Shapes
 
+// TODO: Ensure pitch indicator and roll indicator (pitch ladder) are pixel perfect
+// TODO: Understand Canvas
+
 Item {
     id: root
     visible: true
@@ -36,6 +39,8 @@ Item {
                 // Move origin to centre
                 ctx.translate(width/2, height/2);
 
+                ctx.save();
+
                 // Roll
                 ctx.rotate(roll * Math.PI / 180);
 
@@ -49,6 +54,8 @@ Item {
                 // Draw ground
                 ctx.fillStyle = "#A66b26";
                 ctx.fillRect(-width, 0, width*2, height*2);
+
+                ctx.restore()
 
                 // Draw bezel
                 ctx.beginPath();
@@ -83,8 +90,8 @@ Item {
 
         ShapePath {
             strokeColor: "white"
-            strokeWidth: 4
-            fillColor: "black"
+            strokeWidth: 1
+            fillColor: "white"
 
             startX: rollIndicator.width / 2
             startY: 0
@@ -139,6 +146,7 @@ Item {
     Item {
         id: pipper
         anchors.verticalCenter: root.verticalCenter
+        anchors.verticalCenterOffset: -2.5
         x: 2 * root.width/9
 
         RowLayout {
