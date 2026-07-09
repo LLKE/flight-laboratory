@@ -75,6 +75,12 @@ Item {
         layer.enabled: true
         layer.samples: 4
 
+        transform: Rotation {
+            origin.x: rollIndicator.width / 2
+            origin.y: root.height / 2
+            angle: roll
+        }
+
         ShapePath {
             strokeColor: "white"
             strokeWidth: 4
@@ -86,6 +92,47 @@ Item {
             PathLine { x: rollIndicator.width; y: rollIndicator.height }
             PathLine { x: 0; y: rollIndicator.height }
             PathLine { x: rollIndicator.width / 2; y: 0 }
+        }
+    }
+
+    Item {
+        id: rollTicks
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: -parent.height / 2 // tick length
+
+        property variant bankAngles: [-60, -45, -30, -20, -10, 0, 10, 20, 30, 45, 60]
+
+        property real centerX: width / 2
+        property real centerY: height / 2
+
+        Repeater {
+            model: rollTicks.bankAngles
+            delegate: Item {
+                id: tickWrapper
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                y: 0
+                width: 2
+                height: root.height/2
+
+                transform: Rotation {
+                    origin.x: tickWrapper.width / 2
+                    origin.y: tickWrapper.height
+                    angle: modelData
+                }
+
+                Rectangle {
+                    id: tickLine
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.top
+
+                    height: (modelData % 30 === 0) ? 15 : 8
+                    width: (modelData % 30 === 0) ? 5 : 1.5
+                    color: "#ffffff"
+                }
+            }
         }
     }
 
