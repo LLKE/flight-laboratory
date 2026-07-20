@@ -25,6 +25,7 @@ qt_add_qml_module(appFlightLaboratory
     QML_FILES
         Main.qml
         QML_FILES ArtificialHorizion.qml
+        SOURCES basicdynamicssim.h basicdynamicssim.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

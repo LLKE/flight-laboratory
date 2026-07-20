@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Basic
 import "../FlightLaboratory"
+import FlightLaboratory as FL
 
 
 ApplicationWindow {
@@ -18,6 +19,10 @@ ApplicationWindow {
     property color reallyLight: "#e7e7e7"
     property color light: "#e0e0e0"
 
+    FL.BasicDynamicsSim {
+        id: cosDynamicsSim
+    }
+
     ArtificialHorizion {
         visible: true
         anchors {
@@ -25,8 +30,7 @@ ApplicationWindow {
             horizontalCenter: parent.horizontalCenter
         }
 
+        roll: cosDynamicsSim.roll
         pitch: 10
-        roll: 10
     }
-
 }
