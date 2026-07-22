@@ -23,14 +23,16 @@ ApplicationWindow {
         id: cosDynamicsSim
     }
 
-    ArtificialHorizion {
-        visible: true
-        anchors {
-            verticalCenter: parent.verticalCenter
-            horizontalCenter: parent.horizontalCenter
-        }
+    GridLayout {
+        anchors.fill: parent
 
-        roll: cosDynamicsSim.roll
-        pitch: 10
+        ArtificialHorizion {
+            visible: true
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            roll: cosDynamicsSim.roll
+            pitch: 0
+        }
     }
 }

@@ -9,19 +9,30 @@ import QtQuick.Shapes
 Item {
     id: root
     visible: true
-    width: 350
-    height: 350
 
     property real roll: 0.0
     property real pitch: 0.0
 
     Rectangle {
         id: instrumentDial
-        anchors.fill: parent
+        anchors.centerIn: parent
+        width: Math.min(root.width, root.height)
+        height: width
         radius: width/2
 
         Canvas {
+            id: canvas
             anchors.fill: parent
+
+            Timer {
+                interval: 16 // ~60 FPS (1000ms / 60)
+                running: true
+                repeat: true
+                onTriggered: {
+                    // Update your angles here if needed, then request a redraw
+                    canvas.requestPaint()
+                }
+            }
 
             onPaint: {
                 var ctx = getContext("2d");
@@ -122,7 +133,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 y: 0
                 width: 2
-                height: root.height/2
+                height: root.height / 2
 
                 transform: Rotation {
                     origin.x: tickWrapper.width / 2
@@ -145,12 +156,12 @@ Item {
 
     Item {
         id: pipper
-        anchors.verticalCenter: root.verticalCenter
-        anchors.verticalCenterOffset: -2.5
-        x: 2 * root.width/9
+        anchors.centerIn: parent
+        anchors.horizontalCenterOffset: -pipperRects.width/2
 
         RowLayout {
-            spacing: root.width/18 - 2.5
+            id: pipperRects
+            spacing: root.width/18 - pipperBase.width
 
             Rectangle { width: 2 * root.width/9; height: 5 }
             Rectangle { width: 5; height: 5 }
@@ -184,15 +195,6 @@ Item {
                 delegate: PitchIndicationComponent { isNegative: true }
             }
         }
-
-        transform: [
-            Rotation {
-                angle: roll
-                origin.x: pitchLadder.width/2
-                origin.y: pitchLadder.height/2
-            }
-
-        ]
     }
 
     component PitchIndicationComponent : Item {
