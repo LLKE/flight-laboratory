@@ -53,7 +53,7 @@ Item {
                 ctx.save();
 
                 // Roll
-                ctx.rotate(roll * Math.PI / 180);
+                // ctx.rotate(roll * Math.PI / 180);
 
                 // Pitch
                 ctx.translate(0, calcHorizonShift(pitch));
@@ -93,11 +93,11 @@ Item {
         layer.enabled: true
         layer.samples: 4
 
-        transform: Rotation {
-            origin.x: rollIndicator.width / 2
-            origin.y: root.height / 2
-            angle: roll
-        }
+        // transform: Rotation {
+        //     origin.x: rollIndicator.width / 2
+        //     origin.y: root.height / 2
+        //     angle: roll
+        // }
 
         ShapePath {
             strokeColor: "white"
@@ -159,13 +159,13 @@ Item {
         anchors.centerIn: parent
         anchors.horizontalCenterOffset: -pipperRects.width/2
 
-        RowLayout {
+        Row {
             id: pipperRects
-            spacing: root.width/18 - pipperBase.width
+            spacing: root.width/18
 
             Rectangle { width: 2 * root.width/9; height: 5 }
             Rectangle { width: 5; height: 5 }
-            Rectangle { width: 2* root.width/9; height: 5 }
+            Rectangle { width: 2 * root.width/9; height: 5 }
         }
     }
 
@@ -182,7 +182,7 @@ Item {
 
             Repeater {
                 model: ["30", "20", "10"]
-                delegate: PitchIndicationComponent { isNegative: false }
+                delegate: PitchIndicationComponentPositive{}
             }
         }
 
@@ -192,25 +192,23 @@ Item {
 
             Repeater {
                 model: ["10", "20", "30"]
-                delegate: PitchIndicationComponent { isNegative: true }
+                delegate: PitchIndicationComponentNegative{}
             }
         }
     }
 
-    component PitchIndicationComponent : Item {
+    component PitchIndicationComponentPositive : Item {
 
-        required property bool isNegative
         required property string modelData
 
-        width: pitchIndicationLines.implicitWidth
-        height: pitchIndicationLines.implicitHeight
+        //! Should change with instrument size
+        width: 50
+        height: 20
 
         Column {
             id: pitchIndicationLines
             spacing: 20
             anchors.horizontalCenter: parent.horizontalCenter
-
-            move: Transition { NumberAnimation { properties: "y"; duration: 0 } }
 
             // Long main line
             Rectangle {
@@ -231,32 +229,71 @@ Item {
         }
 
         Text {
+            id: pitchText
             text: modelData
             color: "white"
-            anchors.verticalCenter: isNegative ? pitchIndicationLines.bottom : pitchIndicationLines.top
+            anchors.verticalCenter: pitchIndicationLines.top
             anchors.right: pitchIndicationLines.left
             anchors.rightMargin: 10
         }
 
         Text {
+            id: pitchTextLeft
             text: modelData
             color: "white"
-            anchors.verticalCenter: isNegative ? pitchIndicationLines.bottom : pitchIndicationLines.top
+            anchors.verticalCenter: pitchIndicationLines.top
             anchors.left: pitchIndicationLines.right
             anchors.leftMargin: 10
         }
+    }
 
-        states: [
-            State {
-                name: "negative"
-                when: isNegative
+    component PitchIndicationComponentNegative : Item {
 
-                PropertyChanges {
-                    target: pitchIndicationLines
-                    data: [shortLine, longLine]
-                }
+        required property string modelData
+        //! Should change with instrument size
+        width: 50
+        height: 20
+
+        Column {
+            id: pitchIndicationLines
+            spacing: 20
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            // Short tick line
+            Rectangle {
+                id: shortLine
+                width: root.width / 9
+                height: 1
+                color: "white"
+                anchors.horizontalCenter: parent.horizontalCenter
             }
-        ]
+
+            // Long main line
+            Rectangle {
+                id: longLine
+                width: 2 * root.width / 9
+                height: 1
+                color: "white"
+            }
+        }
+
+        Text {
+            id: pitchText
+            text: modelData
+            color: "white"
+            anchors.verticalCenter: pitchIndicationLines.bottom
+            anchors.right: pitchIndicationLines.left
+            anchors.rightMargin: 10
+        }
+
+        Text {
+            id: pitchTextLeft
+            text: modelData
+            color: "white"
+            anchors.verticalCenter: pitchIndicationLines.bottom
+            anchors.left: pitchIndicationLines.right
+            anchors.leftMargin: 10
+        }
     }
 
     function calcHorizonShift (pitch) {
