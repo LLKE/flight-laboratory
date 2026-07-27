@@ -53,7 +53,7 @@ Item {
                 ctx.save();
 
                 // Roll
-                // ctx.rotate(roll * Math.PI / 180);
+                ctx.rotate(roll * Math.PI / 180);
 
                 // Pitch
                 ctx.translate(0, calcHorizonShift(pitch));
@@ -84,18 +84,18 @@ Item {
     Shape {
         id: rollIndicator
 
-        width: root.width / 10
-        height: root.height / 10
+        width: instrumentDial.width / 10
+        height: instrumentDial.height / 10
 
-        x: root.width / 2 - rollIndicator.width / 2
-        y: 0
+        x: instrumentDial.width / 2
+        y: root.height / 2 - instrumentDial.height / 2
 
         layer.enabled: true
         layer.samples: 4
 
         // transform: Rotation {
         //     origin.x: rollIndicator.width / 2
-        //     origin.y: root.height / 2
+        //     origin.y: instrumentDial.height / 2
         //     angle: roll
         // }
 
@@ -118,12 +118,12 @@ Item {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -parent.height / 2 // tick length
+        anchors.verticalCenterOffset: -instrumentDial.height / 2
 
         property variant bankAngles: [-60, -45, -30, -20, -10, 0, 10, 20, 30, 45, 60]
 
-        property real centerX: width / 2
-        property real centerY: height / 2
+        property real centerX: instrumentDial.width / 2
+        property real centerY: instrumentDial.height / 2
 
         Repeater {
             model: rollTicks.bankAngles
@@ -133,7 +133,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 y: 0
                 width: 2
-                height: root.height / 2
+                height: instrumentDial.height / 2
 
                 transform: Rotation {
                     origin.x: tickWrapper.width / 2
@@ -161,24 +161,26 @@ Item {
 
         Row {
             id: pipperRects
-            spacing: root.width/18
+            spacing: instrumentDial.width/18
 
-            Rectangle { width: 2 * root.width/9; height: 5 }
+            Rectangle { width: 2 * instrumentDial.width/9; height: 5 }
             Rectangle { width: 5; height: 5 }
-            Rectangle { width: 2 * root.width/9; height: 5 }
+            Rectangle { width: 2 * instrumentDial.width/9; height: 5 }
         }
     }
 
     Column {
         id: pitchLadder
 
-        spacing: 40
+        property real indicationUnitSpacing: instrumentDial.radius / 8
+
+        spacing: 2 * indicationUnitSpacing
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
 
         Column {
             id: pitchLadderUp
-            spacing: 20
+            spacing: pitchLadder.indicationUnitSpacing
 
             Repeater {
                 model: ["30", "20", "10"]
@@ -188,7 +190,7 @@ Item {
 
         Column {
             id: pitchLadderDown
-            spacing: 20
+            spacing: pitchLadder.indicationUnitSpacing
 
             Repeater {
                 model: ["10", "20", "30"]
@@ -202,18 +204,18 @@ Item {
         required property string modelData
 
         //! Should change with instrument size
-        width: 50
-        height: 20
+        width: instrumentDial.width / 3
+        height: pitchLadder.indicationUnitSpacing
 
         Column {
             id: pitchIndicationLines
-            spacing: 20
+            spacing: pitchLadder.indicationUnitSpacing
             anchors.horizontalCenter: parent.horizontalCenter
 
             // Long main line
             Rectangle {
                 id: longLine
-                width: 2 * root.width / 9
+                width: 2 * instrumentDial.width / 9
                 height: 1
                 color: "white"
             }
@@ -221,7 +223,7 @@ Item {
             // Short tick line
             Rectangle {
                 id: shortLine
-                width: root.width / 9
+                width: instrumentDial.width / 9
                 height: 1
                 color: "white"
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -251,18 +253,18 @@ Item {
 
         required property string modelData
         //! Should change with instrument size
-        width: 50
-        height: 20
+        width: instrumentDial.width / 3
+        height: pitchLadder.indicationUnitSpacing
 
         Column {
             id: pitchIndicationLines
-            spacing: 20
+            spacing: pitchLadder.indicationUnitSpacing
             anchors.horizontalCenter: parent.horizontalCenter
 
             // Short tick line
             Rectangle {
                 id: shortLine
-                width: root.width / 9
+                width: instrumentDial.width / 9
                 height: 1
                 color: "white"
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -271,7 +273,7 @@ Item {
             // Long main line
             Rectangle {
                 id: longLine
-                width: 2 * root.width / 9
+                width: 2 * instrumentDial.width / 9
                 height: 1
                 color: "white"
             }
