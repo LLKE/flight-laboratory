@@ -87,17 +87,19 @@ Item {
         width: instrumentDial.width / 10
         height: instrumentDial.height / 10
 
-        x: instrumentDial.width / 2
-        y: root.height / 2 - instrumentDial.height / 2
+        anchors {
+            top: instrumentDial.top
+            horizontalCenter: instrumentDial.horizontalCenter
+        }
 
         layer.enabled: true
         layer.samples: 4
 
-        // transform: Rotation {
-        //     origin.x: rollIndicator.width / 2
-        //     origin.y: instrumentDial.height / 2
-        //     angle: roll
-        // }
+        transform: Rotation {
+            origin.x: rollIndicator.width / 2
+            origin.y: instrumentDial.height / 2
+            angle: roll
+        }
 
         ShapePath {
             strokeColor: "white"
@@ -299,7 +301,8 @@ Item {
     }
 
     function calcHorizonShift (pitch) {
-        // 40 pixels = 10 degrees pitch
-        return 4 * pitch
+        // pitchLadder.indicationUnitSpacing = 5 degrees pitch (1 pitch line)
+
+        return pitchLadder.indicationUnitSpacing * pitch / 5
     }
 }

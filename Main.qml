@@ -32,7 +32,7 @@ ApplicationWindow {
             Layout.fillWidth: true
 
             roll: cosDynamicsSim.roll
-            pitch: 0
+            pitch: -15
         }
     }
 }
