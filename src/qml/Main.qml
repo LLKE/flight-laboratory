@@ -1,9 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Basic
-import "../FlightLaboratory"
-import FlightLaboratory as FL
 
+import FlightLaboratory as FL
 
 ApplicationWindow {
     id: window
@@ -32,7 +31,7 @@ ApplicationWindow {
             Layout.fillWidth: true
 
             roll: cosDynamicsSim.roll
-            pitch: -15
+            pitch: 0
         }
     }
 }

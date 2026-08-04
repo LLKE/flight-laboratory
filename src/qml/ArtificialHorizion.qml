@@ -16,7 +16,7 @@ Item {
     Rectangle {
         id: instrumentDial
         anchors.centerIn: parent
-        width: Math.min(root.width, root.height)
+        width: Math.min(root.width, root.height) - 40
         height: width
         radius: width/2
 
@@ -37,18 +37,18 @@ Item {
             onPaint: {
                 var ctx = getContext("2d");
                 var bezel_width = 10;
-                var bezel_radius = (width / 2);
+                var bezel_radius = (canvas.width / 2);
 
-                ctx.clearRect(0, 0, width, height);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 // Circular viewport
                 ctx.save();
                 ctx.beginPath();
-                ctx.arc(width/2, height/2, width/2, 0, 2*Math.PI);
+                ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2, 0, 2*Math.PI);
                 ctx.clip();
 
                 // Move origin to centre
-                ctx.translate(width/2, height/2);
+                ctx.translate(canvas.width/2, canvas.height/2);
 
                 ctx.save();
 
@@ -60,11 +60,11 @@ Item {
 
                 // Draw sky
                 ctx.fillStyle = "#0689e4";
-                ctx.fillRect(-width, -height*2, width*2, height*2);
+                ctx.fillRect(-canvas.width, -canvas.height*2, canvas.width*2, canvas.height*2);
 
                 // Draw ground
                 ctx.fillStyle = "#A66b26";
-                ctx.fillRect(-width, 0, width*2, height*2);
+                ctx.fillRect(-canvas.width, 0, canvas.width*2, canvas.height*2);
 
                 ctx.restore()
 
@@ -84,8 +84,8 @@ Item {
     Shape {
         id: rollIndicator
 
-        width: instrumentDial.width / 10
-        height: instrumentDial.height / 10
+        width: instrumentDial.width / 14
+        height: instrumentDial.height / 14
 
         anchors {
             top: instrumentDial.top
@@ -160,6 +160,7 @@ Item {
         id: pipper
         anchors.centerIn: parent
         anchors.horizontalCenterOffset: -pipperRects.width/2
+        anchors.verticalCenterOffset: -pipperRects.height/2
 
         Row {
             id: pipperRects

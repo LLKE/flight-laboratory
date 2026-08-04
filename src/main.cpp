@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
         &app,
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
-    engine.loadFromModule("FlightLaboratory", "Main");
 
+    engine.loadFromModule("FlightLaboratory", "Main");
     BasicDynamicsSim* rollGenerator = new BasicDynamicsSim();
 
     return QGuiApplication::exec();
