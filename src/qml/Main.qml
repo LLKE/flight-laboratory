@@ -18,20 +18,32 @@ ApplicationWindow {
     property color reallyLight: "#e7e7e7"
     property color light: "#e0e0e0"
 
-    FL.BasicDynamicsSim {
-        id: cosDynamicsSim
-    }
-
-    GridLayout {
+    ColumnLayout {
         anchors.fill: parent
 
-        ArtificialHorizion {
-            visible: true
-            Layout.fillHeight: true
+        ComboBox {
+            id: presetSelector
+
             Layout.fillWidth: true
 
-            roll: cosDynamicsSim.roll
-            pitch: 0
+            model: [
+                { name: "Start", source: ""},
+                { name: "PID Lab", source: "PIDLab.qml" }
+            ]
+
+            textRole: "name"
+
+            onActivated: {
+                presetLoader.source = currentValue.source
+            }
+        }
+
+        Loader {
+            id: presetLoader
+            sourceComponent: FL.PIDLab
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
         }
     }
 }
