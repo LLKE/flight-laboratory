@@ -1,0 +1,10 @@
+site_name: Flight Laboratory
+site_url: https://LLKE.github.io/flight-Laboratory
+repo_url: https://github.com/LLKE/flight-laboratory
+
+theme: 
+  name: material
+
+nav: 
+  - Home: index.md
+  - Architecture: architecture.md
