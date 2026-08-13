@@ -85,3 +85,7 @@ CMakeLists.txt.user*
 
 # Documentation
 site/
+
+# Virtual Environment
+.venv/
+venv/
