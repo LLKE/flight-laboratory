@@ -22,4 +22,6 @@ nav:
   - Developer Guide: development.md
   - Architecture: architecture.md
   - Components: components.md
+  - Physics: 
+    - Pitch Dynamics Model: physics/pitch-dynamics-model.md
   
