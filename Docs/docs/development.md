@@ -1,9 +1,5 @@
 # Developer Guide
 
-## OS
-
-- Ubuntu xx.xx (or whatever Qt needs)
-
 ## Installing Qt
 
 As the UI is based on Qt, the first thing to do is to install it. Head over [here](https://www.qt.io/development/download-qt-installer-oss), and download the according installer for your OS. The installation has only been tested on Ubuntu 24.04 so far.
