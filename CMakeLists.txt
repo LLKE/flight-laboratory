@@ -20,6 +20,8 @@ qt_add_executable(appFlightLaboratory
     src/main.cpp
     src/basicdynamicssim.h
     src/basicdynamicssim.cpp
+    src/pitchmodel.h
+    src/pitchmodel.cpp
 )
 
 target_include_directories(appFlightLaboratory PRIVATE src)
