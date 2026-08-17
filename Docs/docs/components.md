@@ -12,8 +12,6 @@ Spanning vertically is the _pitch ladder_, where each line represents 5 degrees 
 
 The triangle at the top of the circular dial is the _roll indicator_. This indicates the vehicle's roll angle with the help of the ticks on the outside of the dial's bezel. The first three ticks in each direction represent 10 degrees of roll. After that, each tick represents 15 degrees.
 
-
-
 ## Back End
 
 ### Basic Dynamics Sim

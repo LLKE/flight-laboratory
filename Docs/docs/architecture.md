@@ -9,6 +9,7 @@ The front end does not handle any flight logic. It is solely responsible to disp
 The front end consists of an application window that allows the user to choose a preset. Once chosen, this preset in loaded. 
 
 Presets currently available are:
+
 + PIDLab 
 
 ```mermaid
