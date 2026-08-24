@@ -36,6 +36,7 @@ qt_add_qml_module(appFlightLaboratory
         src/qml/ArtificialHorizion.qml
         src/qml/AttitudeGraph.qml
         src/qml/PIDLab.qml
+        SOURCES src/pid.h src/pid.cpp
 )
 
 set_target_properties(appFlightLaboratory PROPERTIES

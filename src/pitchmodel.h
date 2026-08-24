@@ -7,15 +7,15 @@ public:
     pitchModel();
     pitchModel(float elevator_eff, float pitch_damping, float timestep);
 
-    double getValue() { return _state.pitch; };
+    double getValue(const float elevator_deflection, const float time) { calc_value(elevator_deflection, time); return _state.pitch; };
 
 private:
 
-    void calc_value(const float elevator_deflection);
+    void calc_value(const float elevator_deflection, const float time);
 
     float _pitch_damping {};
     float _elevator_effectiveness {};
-    float _timestep {};
+    float _timestep_prev {};
 
     struct State{
         float pitch;
