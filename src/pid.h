@@ -7,10 +7,11 @@ class pid
 public:
     pid(std::vector<float> actuator_constraints, float p, float i, float d);
 
-    float getControlCommand(const float error, const float dt) {calcControlCommand(error, dt); return _control_command;};
+    float getControlCommand(const float setpoint, const float actual, const float dt)
+        { calcControlCommand(setpoint, actual, dt); return _control_command; };
 
 private:
-    void calcControlCommand(const float error, const float dt);
+    float calcControlCommand(const float setpoint, const float measurement, const float dt);
 
     const float _p;
     const float _i;
@@ -20,6 +21,7 @@ private:
 
     float _control_command {};
     float _error_prev {};
+    float _integral {};
 
 };
 
