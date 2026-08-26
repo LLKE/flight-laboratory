@@ -24,20 +24,47 @@ qt_add_executable(appFlightLaboratory
     src/pitchmodel.cpp
 )
 
-target_include_directories(appFlightLaboratory PRIVATE src)
+target_include_directories(appFlightLaboratory PRIVATE
+    src
+    src/virtual_pilot
+)
 
 qt_add_qml_module(appFlightLaboratory
     URI FlightLaboratory
     VERSION 1.0
-    RESOURCE_PREFIX "/qt/qml"
 
     QML_FILES
         src/qml/Main.qml
         src/qml/ArtificialHorizion.qml
         src/qml/AttitudeGraph.qml
         src/qml/PIDLab.qml
-        SOURCES src/pid.h src/pid.cpp
-        SOURCES src/virtual_pilot/virtual_pilot.h src/virtual_pilot/virtual_pilot.cpp
+
+    SOURCES
+        src/pid.h
+        src/pid.cpp
+        src/virtual_pilot/virtual_pilot.h
+        src/virtual_pilot/virtual_pilot.cpp
+        src/virtual_pilot/roll_sin_pilot.h
+        src/virtual_pilot/roll_sin_pilot.cpp
+)
+
+set_target_properties(appFlightLaboratory PROPERTIES
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
+
+target_link_libraries(appFlightLaboratory
+    PRIVATE
+        Qt6::Quick
+        Qt6::QuickEffects
+)
+
+install(TARGETS appFlightLaboratory
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 set_target_properties(appFlightLaboratory PROPERTIES

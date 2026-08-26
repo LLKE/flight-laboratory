@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "roll_sin_pilot.h"
+#include "virtual_pilot/roll_sin_pilot.h"
 
 int main(int argc, char *argv[])
 {
