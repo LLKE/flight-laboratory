@@ -89,3 +89,12 @@ site/
 # Virtual Environment
 .venv/
 venv/
+
+# CMake Build Artifacts
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+meta_types/
+qmltypes/
+.qt/
+FlightLaboratory/
