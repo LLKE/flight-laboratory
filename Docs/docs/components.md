@@ -17,3 +17,7 @@ The triangle at the top of the circular dial is the _roll indicator_. This indic
 ### Basic Dynamics Sim
 
 This class creates a sinusoidal output for the roll angle at 1Hz. For the API documentation, see .
+
+### PID Controller
+
+Implements a PID controller for float values. For the API documentation, see .
