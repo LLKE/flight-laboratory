@@ -7,7 +7,7 @@ import FlightLaboratory as FL
 Item {
     anchors.fill: parent
 
-    FL.BasicDynamicsSim {
+    FL.RollSinPilot {
         id: cosDynamicsSim
     }
 

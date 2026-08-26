@@ -1,5 +1,5 @@
-#ifndef BASICDYNAMICSSIM_H
-#define BASICDYNAMICSSIM_H
+#ifndef ROLLSINPILOT_H
+#define ROLLSINPILOT_H
 
 #include <QObject>
 #include <QTimer>
@@ -7,14 +7,16 @@
 #include <QDebug>
 #include <QtQml/QQmlEngine>
 
-class BasicDynamicsSim : public QObject
+#include "virtual_pilot.h"
+
+class RollSinPilot : public QObject, public VirtualPilot
 {
     Q_OBJECT
     QML_ELEMENT
     Q_PROPERTY(float roll READ roll NOTIFY rollChanged FINAL)
 
 public:
-    explicit BasicDynamicsSim(QObject *parent = nullptr);
+    explicit RollSinPilot(QObject *parent = nullptr);
 
     float roll() const { return m_roll; }
 
@@ -34,4 +36,4 @@ private:
 
 };
 
-#endif // BASICDYNAMICSSIM_H
+#endif // ROLLSINPILOT_H

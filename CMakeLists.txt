@@ -18,8 +18,8 @@ endif()
 
 qt_add_executable(appFlightLaboratory
     src/main.cpp
-    src/basicdynamicssim.h
-    src/basicdynamicssim.cpp
+    src/virtual_pilot/roll_sin_pilot.h
+    src/virtual_pilot/roll_sin_pilot.cpp
     src/pitchmodel.h
     src/pitchmodel.cpp
 )
@@ -37,6 +37,7 @@ qt_add_qml_module(appFlightLaboratory
         src/qml/AttitudeGraph.qml
         src/qml/PIDLab.qml
         SOURCES src/pid.h src/pid.cpp
+        SOURCES src/virtual_pilot/virtual_pilot.h src/virtual_pilot/virtual_pilot.cpp
 )
 
 set_target_properties(appFlightLaboratory PROPERTIES

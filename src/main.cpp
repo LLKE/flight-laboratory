@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "basicdynamicssim.h"
+#include "roll_sin_pilot.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
 
     engine.loadFromModule("FlightLaboratory", "Main");
-    BasicDynamicsSim* rollGenerator = new BasicDynamicsSim();
+    RollSinPilot* rollGenerator = new RollSinPilot();
 
     return QGuiApplication::exec();
 }

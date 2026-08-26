@@ -1,6 +1,6 @@
-#include "basicdynamicssim.h"
+#include "roll_sin_pilot.h"
 
-BasicDynamicsSim::BasicDynamicsSim(QObject *parent)
+RollSinPilot::RollSinPilot(QObject *parent)
     : QObject(parent),
     m_frequency(1.0),
     m_amplitude(20.0),
@@ -10,14 +10,14 @@ BasicDynamicsSim::BasicDynamicsSim(QObject *parent)
 {
     rollUpdateTimer = new QTimer(this); // Pass "this" as parent for memory management
 
-    // connect timer with its timeout signal to BasicDynamicsSim with its simRollSin function
-    connect(rollUpdateTimer, &QTimer::timeout, this, &BasicDynamicsSim::simRollSin);
+    // connect timer with its timeout signal to RollSinPilot with its simRollSin function
+    connect(rollUpdateTimer, &QTimer::timeout, this, &RollSinPilot::simRollSin);
 
     rollUpdateTimer->setInterval(20);
     rollUpdateTimer->start();
 }
 
-void BasicDynamicsSim::simRollSin() {
+void RollSinPilot::simRollSin() {
     const double PI = std::acos(-1);
     m_roll = m_amplitude * qSin(2 * PI * m_frequency * m_currentTime);
     m_currentTime += m_timeStep;
