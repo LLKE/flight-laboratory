@@ -23,10 +23,11 @@ flowchart TD
 
 This controls all the flight logic.
 
-Currently implemented is a basic dynamics simulator that simply generates a roll angle in the shape of a sin wave. This is then plugged into the front end:
+### PIDLab
 
 ```mermaid
-flowchart LR
-    BasicDynamicsSim --dynamics--> PIDLab
-    PIDLab --roll angle--> ArtificialHorizon
+flowchart TD:
+    PID
+    pitch_model[Pitch Model]
+    virtual_pilot[Virtual Pilot] -->
 ```
