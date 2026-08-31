@@ -73,15 +73,3 @@ set_target_properties(appFlightLaboratory PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
-
-target_link_libraries(appFlightLaboratory
-    PRIVATE
-        Qt6::Quick
-        Qt6::QuickEffects
-)
-
-install(TARGETS appFlightLaboratory
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
