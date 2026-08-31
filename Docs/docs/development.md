@@ -39,8 +39,11 @@ To create new documentation, create a new .md file under FlightLaboratory/Docs/d
 ```yml
 nav: 
   - Home: index.md
-  - Getting Started: getting-started.md
   - Developer Guide: development.md
   - Architecture: architecture.md
   - Components: components.md
 ```
+
+## Building and Running FlightLaboratory from VSCode
+
+If you're like me and prefer working in VSCode, head over [here](dev-guide/setup-build-vscode.md) for the setup and build guide.
