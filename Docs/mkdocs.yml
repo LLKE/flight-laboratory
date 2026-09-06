@@ -19,7 +19,10 @@ theme:
 nav: 
   - Home: index.md
   - Getting Started: getting-started.md
-  - Developer Guide: development.md
+  - Developer Guide: 
+    - Choosing an Editor: development.md
+    - Working in Qt-Creator: dev-guide/setup-build-qt-creator.md
+    - Working in VSCode: dev-guide/setup-build-vscode.md
   - Architecture: architecture.md
   - Components: components.md
   - Physics: 
