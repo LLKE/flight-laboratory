@@ -5,16 +5,16 @@ repo_url: https://github.com/LLKE/flight-laboratory
 theme: 
   name: readthedocs
 
-plugins:
-- search
-- mkdoxy:
-    projects:
-      FlightLaboratory:
-        src-dirs: "../src"
-        full-doc: True
-        doxy-cfg:
-          FILE_PATTERNS: "*.cpp *.h"
-          RECURSIVE: True
+# plugins:
+# - search
+# - mkdoxy:
+#     projects:
+#       FlightLaboratory:
+#         src-dirs: "../src"
+#         full-doc: True
+#         doxy-cfg:
+#           FILE_PATTERNS: "*.cpp *.h"
+#           RECURSIVE: True
 
 nav: 
   - Home: index.md

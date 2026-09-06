@@ -82,6 +82,8 @@ CMakeLists.txt.user*
 .uic/
 /build*/
 /.qtcreator/
+meta_types/
+qmltypes/
 
 # Documentation
 site/
