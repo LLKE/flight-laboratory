@@ -25,9 +25,4 @@ This controls all the flight logic.
 
 ### PIDLab
 
-```mermaid
-flowchart TD:
-    PID
-    pitch_model[Pitch Model]
-    virtual_pilot[Virtual Pilot] -->
-```
+![Block Diagram](media/pid.drawio.svg)
