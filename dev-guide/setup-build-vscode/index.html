@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://LLKE.github.io/flight-laboratory/dev-guide/setup-build-vscode/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Setup and Build Guide for VSCode - Flight Laboratory</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Setup and Build Guide for VSCode";
+        var mkdocs_page_input_path = "dev-guide/setup-build-vscode.md";
+        var mkdocs_page_url = "/flight-laboratory/dev-guide/setup-build-vscode/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Flight Laboratory
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../development/">Developer Guide</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../architecture/">Architecture</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../components/">Components</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Physics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../physics/pitch-dynamics-model/">Pitch Dynamics Model</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Flight Laboratory</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Setup and Build Guide for VSCode</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/LLKE/flight-laboratory/edit/master/docs/dev-guide/setup-build-vscode.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="setup-and-build-guide-for-vscode">Setup and Build Guide for VSCode</h1>
+<p>This guide explains how to configure, build, and run <strong>FlightLaboratory</strong> in VSCode.</p>
+<p>The project uses:</p>
+<ul>
+<li><strong>C++17</strong></li>
+<li><strong>Qt 6.11</strong></li>
+<li><strong>Qt Quick / QML</strong></li>
+<li><strong>CMake</strong></li>
+<li><strong>Ninja</strong></li>
+<li><strong>GCC/G++</strong></li>
+<li><strong>VS Code</strong></li>
+</ul>
+<p>The instructions below assume <strong>Linux</strong>.</p>
+<hr />
+<h2 id="1-install-the-required-software">1. Install the required software</h2>
+<p>Before opening the project, make sure the following are installed.</p>
+<h3 id="vs-code">VS Code</h3>
+<p>Install Visual Studio Code and the following extensions:</p>
+<ul>
+<li><strong>C/C++</strong> (Microsoft)</li>
+<li><strong>CMake Tools</strong> (Microsoft)</li>
+</ul>
+<hr />
+<h2 id="2-install-cmake-ninja-and-gcc">2. Install CMake, Ninja and GCC</h2>
+<p>On Ubuntu/Debian-based systems:</p>
+<pre><code class="language-bash">sudo apt update
+sudo apt install cmake ninja-build gcc-11 g++-11
+</code></pre>
+<p>Check the installations:</p>
+<pre><code class="language-bash">cmake --version
+ninja --version
+gcc-11 --version
+g++-11 --version
+</code></pre>
+<hr />
+<h2 id="3-install-qt">3. Install Qt</h2>
+<p>Install <strong>Qt 6.11</strong> with the Qt online installer.</p>
+<p>The project expects a Qt installation containing at least:</p>
+<ul>
+<li>Qt Core</li>
+<li>Qt Gui</li>
+<li>Qt Quick</li>
+<li>Qt Quick Effects</li>
+<li>Qt QML</li>
+</ul>
+<p>A typical Qt installation might be located at:</p>
+<pre><code class="language-text">/home/&lt;username&gt;/Qt/6.11.1/gcc_64
+</code></pre>
+<p>The exact path depends on where Qt was installed.</p>
+<hr />
+<h2 id="4-clone-the-repository">4. Clone the repository</h2>
+<p>Clone the project:</p>
+<pre><code class="language-bash">git clone &lt;repository-url&gt;
+</code></pre>
+<p>Then enter the project directory:</p>
+<pre><code class="language-bash">cd FlightLaboratory
+</code></pre>
+<p>The project contains the <code>CMakeLists.txt</code> file at its root:</p>
+<pre><code class="language-text">FlightLaboratory/
+├── CMakeLists.txt
+├── src/
+│   ├── main.cpp
+│   ├── ...
+│   └── qml/
+│       └── ...
+└── ...
+</code></pre>
+<hr />
+<h1 id="5-open-the-project-in-vs-code">5. Open the project in VS Code</h1>
+<p>From the project directory:</p>
+<pre><code class="language-bash">code .
+</code></pre>
+<p>VS Code should detect the <code>CMakeLists.txt</code> automatically.</p>
+<p>If prompted to select a CMake kit, select the GCC compiler used by the project, for example:</p>
+<pre><code class="language-text">GCC 11
+</code></pre>
+<p>You can also select it manually through:</p>
+<p><strong>Command Palette (Ctrl + Shift + P) → CMake: Select a Kit</strong></p>
+<hr />
+<h1 id="6-configure-the-qt-installation">6. Configure the Qt installation</h1>
+<p>CMake needs to know where Qt is installed.</p>
+<p>The easiest way is to configure <code>CMAKE_PREFIX_PATH</code>.</p>
+<p>Open VS Code's <strong>CMake Tools configuration</strong> and set:</p>
+<pre><code class="language-text">CMAKE_PREFIX_PATH=/home/&lt;username&gt;/Qt/6.11.1/gcc_64
+</code></pre>
+<p>This tells CMake where to search when the project contains:</p>
+<pre><code class="language-cmake">find_package(Qt6 REQUIRED COMPONENTS
+    Quick
+    QuickEffects
+)
+</code></pre>
+<h3 id="verify-the-path">Verify the path</h3>
+<p>The directory should contain something similar to:</p>
+<pre><code class="language-text">/home/&lt;username&gt;/Qt/6.11.1/gcc_64/
+├── bin/
+├── include/
+├── lib/
+└── ...
+</code></pre>
+<p>If <code>gcc_64</code> does not exist, check which Qt version and compiler configuration you installed.</p>
+<hr />
+<h1 id="7-configure-the-project">7. Configure the project</h1>
+<p>In VS Code, open the Command Palette:</p>
+<p><strong>Ctrl + Shift + P</strong></p>
+<p>Select:</p>
+<pre><code class="language-text">CMake: Configure
+</code></pre>
+<p>CMake should find Qt and configure the project.</p>
+<p>A successful configuration should end with something similar to:</p>
+<pre><code class="language-text">Configuring done
+Generating done
+</code></pre>
+<p>The <code>build/</code> directory will be created automatically:</p>
+<pre><code class="language-text">FlightLaboratory/
+├── CMakeLists.txt
+├── src/
+└── build/
+</code></pre>
+<p>You generally should <strong>not modify anything inside <code>build/</code> manually</strong>.</p>
+<hr />
+<h1 id="8-build-the-project">8. Build the project</h1>
+<p>After configuration, build the application using:</p>
+<p><strong>Ctrl + Shift + P → CMake: Build</strong></p>
+<p>Alternatively, use the build button provided by CMake Tools in the VS Code interface.</p>
+<p>A successful build produces the application executable.</p>
+<p>You can also build from a terminal:</p>
+<pre><code class="language-bash">cmake --build build
+</code></pre>
+<hr />
+<h1 id="9-run-the-application">9. Run the application</h1>
+<p>After a successful build, use:</p>
+<p><strong>Ctrl + Shift + P → CMake: Run Without Debugging</strong></p>
+<p>Alternatively, press:</p>
+<pre><code class="language-text">Ctrl + F5
+</code></pre>
+<p>if the CMake Tools launch configuration is available.</p>
+<hr />
+<h1 id="10-typical-development-workflow">10. Typical development workflow</h1>
+<p>Once the project has been configured successfully, the normal workflow is:</p>
+<pre><code class="language-text">Clone project
+     ↓
+Open in VS Code
+     ↓
+Configure CMake
+     ↓
+Build
+     ↓
+Run
+</code></pre>
+<p>After the initial configuration, you normally only need to <strong>build and run</strong> when modifying source code.</p>
+<p>You need to configure CMake again when making changes such as:</p>
+<ul>
+<li>modifying <code>CMakeLists.txt</code></li>
+<li>adding/removing source files</li>
+<li>changing Qt dependencies</li>
+<li>changing the compiler</li>
+<li>changing the build configuration</li>
+</ul>
+<hr />
+<h1 id="11-clean-configuration">11. Clean configuration</h1>
+<p>If CMake gets into an inconsistent state, delete the generated build directory:</p>
+<pre><code class="language-bash">rm -rf build
+</code></pre>
+<p>Then configure the project again:</p>
+<pre><code class="language-text">Ctrl + Shift + P
+→ CMake: Configure
+</code></pre>
+<p>This forces CMake to regenerate all build files and Qt-generated files.</p>
+<p>This is particularly useful after significant changes to:</p>
+<pre><code class="language-cmake">qt_add_executable(...)
+</code></pre>
+<p>or:</p>
+<pre><code class="language-cmake">qt_add_qml_module(...)
+</code></pre>
+<hr />
+<h1 id="12-troubleshooting">12. Troubleshooting</h1>
+<h2 id="cmake-cannot-find-qt">CMake cannot find Qt</h2>
+<p>If you see an error such as:</p>
+<pre><code class="language-text">Could not find a package configuration file provided by &quot;Qt6&quot;
+</code></pre>
+<p>check <code>CMAKE_PREFIX_PATH</code>.</p>
+<p>It should point to the Qt compiler installation, for example:</p>
+<pre><code class="language-text">/home/&lt;username&gt;/Qt/6.11.1/gcc_64
+</code></pre>
+<p><strong>Do not point it to:</strong></p>
+<pre><code class="language-text">/home/&lt;username&gt;/Qt/6.11.1/
+</code></pre>
+<p>if the actual Qt installation is inside <code>gcc_64</code>.</p>
+<hr />
+<h2 id="cmake-finds-qt-but-cannot-find-a-qt-component">CMake finds Qt but cannot find a Qt component</h2>
+<p>For example:</p>
+<pre><code class="language-text">Could not find a package configuration file provided by
+&quot;Qt6QuickEffects&quot;
+</code></pre>
+<p>Check that the required Qt component was installed.</p>
+<p>The project's CMake file currently requires:</p>
+<pre><code class="language-cmake">find_package(Qt6 REQUIRED COMPONENTS
+    Quick
+    QuickEffects
+)
+</code></pre>
+<hr />
+<h2 id="rollsinpilot-or-another-qml-c-class-cannot-be-found"><code>RollSinPilot</code> or another QML C++ class cannot be found</h2>
+<p>C++ classes exposed to QML using:</p>
+<pre><code class="language-cpp">Q_OBJECT
+QML_ELEMENT
+</code></pre>
+<p>must be included in the <code>SOURCES</code> section of the corresponding <code>qt_add_qml_module()</code>.</p>
+<p>For example:</p>
+<pre><code class="language-cmake">qt_add_qml_module(appFlightLaboratory
+    URI FlightLaboratory
+    VERSION 1.0
+
+    QML_FILES
+        src/qml/Main.qml
+
+    SOURCES
+        src/virtual_pilot/virtual_pilot.h
+        src/virtual_pilot/virtual_pilot.cpp
+        src/virtual_pilot/roll_sin_pilot.h
+        src/virtual_pilot/roll_sin_pilot.cpp
+)
+</code></pre>
+<p>For this project, the include directories also contain:</p>
+<pre><code class="language-cmake">target_include_directories(appFlightLaboratory PRIVATE
+    src
+    src/virtual_pilot
+)
+</code></pre>
+<p>The second directory is required because Qt's generated QML registration code may include headers by their filename rather than their path.</p>
+<hr />
+<h1 id="13-building-manually">13. Building manually</h1>
+<p>Although VS Code is the recommended development environment, the project can also be configured and built from a terminal.</p>
+<p>From the project root:</p>
+<pre><code class="language-bash">cmake -S . -B build \
+    -G Ninja \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_PREFIX_PATH=/home/&lt;username&gt;/Qt/6.11.1/gcc_64
+</code></pre>
+<p>Then:</p>
+<pre><code class="language-bash">cmake --build build
+</code></pre>
+<p>The application can then be run from the generated build directory.</p>
+<p>This is also useful for diagnosing whether a problem originates from the project/CMake configuration or from the VS Code environment.</p>
+<hr />
+<h1 id="14-quick-start">14. Quick start</h1>
+<p>For someone who has just cloned the project, the essential steps are:</p>
+<h3 id="install">Install</h3>
+<ul>
+<li>Qt 6.11</li>
+<li>GCC/G++ 11</li>
+<li>CMake</li>
+<li>Ninja</li>
+<li>VS Code</li>
+<li>C/C++ extension</li>
+<li>CMake Tools extension</li>
+</ul>
+<h3 id="configure-qt">Configure Qt</h3>
+<p>Set:</p>
+<pre><code class="language-text">CMAKE_PREFIX_PATH=/home/&lt;username&gt;/Qt/6.11.1/gcc_64
+</code></pre>
+<h3 id="configure">Configure</h3>
+<p><strong>VS Code → Command Palette → CMake: Configure</strong></p>
+<h3 id="build">Build</h3>
+<p><strong>VS Code → Command Palette → CMake: Build</strong></p>
+<h3 id="run">Run</h3>
+<p><strong>VS Code → Command Palette → CMake: Run Without Debugging</strong></p>
+<h3 id="if-something-goes-wrong">If something goes wrong</h3>
+<p>Delete:</p>
+<pre><code class="language-bash">rm -rf build
+</code></pre>
+<p>and configure again.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/LLKE/flight-laboratory" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

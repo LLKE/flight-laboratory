@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://LLKE.github.io/flight-laboratory/development/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Developer Guide - Flight Laboratory</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Developer Guide";
+        var mkdocs_page_input_path = "development.md";
+        var mkdocs_page_url = "/flight-laboratory/development/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Flight Laboratory
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Developer Guide</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#installing-qt">Installing Qt</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#execution">Execution</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#building-and-running-flightlaboratory-from-vscode">Building and Running FlightLaboratory from VSCode</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../components/">Components</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Physics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../physics/pitch-dynamics-model/">Pitch Dynamics Model</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Flight Laboratory</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Developer Guide</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/LLKE/flight-laboratory/edit/master/docs/development.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="developer-guide">Developer Guide</h1>
+<h2 id="installing-qt">Installing Qt</h2>
+<p>As the UI is based on Qt, the first thing to do is to install it. Head over <a href="https://www.qt.io/development/download-qt-installer-oss">here</a>, and download the according installer for your OS. The installation has only been tested on Ubuntu 24.04 so far.</p>
+<p>Once downloaded, run the installer and follow the steps. Ensure you install Qt-Creator while at it. This is the Qt-Specific IDE which streamlines the development. Of yourse, you can also use VSCode, but the instructions here mainly cover Qt-Creator.</p>
+<h2 id="execution">Execution</h2>
+<p>To run Flight Laboratory, head to the repo and clone it.</p>
+<p>In Qt-Creator, select "Open Project" and navigate to the cloned repo. If the project has been opened before, it will be visible on the welcome page and can be selected from there.</p>
+<p><img alt="Open Project" src="../media/open-project.png" /></p>
+<p>Once the project has been opened, it can be built and run with the buttons in the bottom left.</p>
+<p><img alt="Run Project" src="../media/run-project.png" /></p>
+<h2 id="documentation">Documentation</h2>
+<p>Documentation for this project is generated using <a href="https://www.mkdocs.org/">MkDocs</a>. A couple of installations are required to run this, including mkdoxy, which generates API documentations from docstrings in the code.</p>
+<p>To get started, create a virtual environment at the root FlightLaboratory/ directory using:</p>
+<pre><code class="language-bash">python3 -m venv .venv
+</code></pre>
+<p>Then run</p>
+<pre><code class="language-bash">pip install -r requirements.txt
+</code></pre>
+<p>To create new documentation, create a new .md file under FlightLaboratory/Docs/docs/, and reference it under FlightLaboratory/Docs/mkdocs.yml, in the following section, and in the order it should appear with respect to the existing documentation:</p>
+<pre><code class="language-yml">nav: 
+  - Home: index.md
+  - Developer Guide: development.md
+  - Architecture: architecture.md
+  - Components: components.md
+</code></pre>
+<h2 id="building-and-running-flightlaboratory-from-vscode">Building and Running FlightLaboratory from VSCode</h2>
+<p>If you're like me and prefer working in VSCode, head over <a href="../dev-guide/setup-build-vscode/">here</a> for the setup and build guide.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../architecture/" class="btn btn-neutral float-right" title="Architecture">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/LLKE/flight-laboratory" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../architecture/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
