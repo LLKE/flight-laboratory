@@ -1,10 +1,10 @@
 #include "pitchmodel.h"
 
-pitchModel::pitchModel(float elevator_eff, float pitch_damping, float timestep)
+PitchModel::PitchModel(float elevator_eff, float pitch_damping, float timestep)
     : _elevator_effectiveness(elevator_eff), _pitch_damping(pitch_damping)
 {}
 
-void pitchModel::calc_value(const float elevator_deflection, const float time) {
+void PitchModel::calc_value(const float elevator_deflection, const float time) {
 
     const float timestep = time - _timestep_prev;
 

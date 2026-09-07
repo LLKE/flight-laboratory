@@ -1,13 +1,14 @@
 #ifndef PITCHMODEL_H
 #define PITCHMODEL_H
 
-class pitchModel
+class PitchModel
 {
 public:
-    pitchModel();
-    pitchModel(float elevator_eff, float pitch_damping, float timestep);
+    PitchModel(float elevator_eff, float pitch_damping, float timestep);
 
     double getValue(const float elevator_deflection, const float time) { calc_value(elevator_deflection, time); return _state.pitch; };
+
+    double getPrevValue() { return _state_prev.pitch; };
 
 private:
 
