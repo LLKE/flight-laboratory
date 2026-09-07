@@ -2,10 +2,10 @@
 #define PID_H
 #include <vector>
 
-class pid
+class PIDController
 {
 public:
-    pid(std::vector<float> actuator_constraints, float p, float i, float d);
+    PIDController(std::vector<float> actuator_constraints, float p, float i, float d);
 
     float getControlCommand(const float setpoint, const float actual, const float dt)
         { calcControlCommand(setpoint, actual, dt); return _control_command; };
