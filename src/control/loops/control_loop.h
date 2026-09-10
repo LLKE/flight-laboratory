@@ -7,7 +7,6 @@ class ControlLoop {
 public:
     ControlLoop();  
 
-protected:
     virtual void update(double dt) = 0;
 };
 

@@ -4,14 +4,15 @@
 #include "virtual_pilot/pitch_step_pilot.h"
 #include "control/loops/control_loop.h"
 #include "control/controllers/pid.h"
-#include "pitchmodel.h"
+#include "models/pitch_model.h"
 
 // Generates an output that can be displayed in front end.
 class pidControlLoop : public ControlLoop {
 
 public:
-    pidControlLoop();
-    void update(float dt) override;
+    pidControlLoop() {};
+    
+    void update(double dt) override;
 
 private:
 
