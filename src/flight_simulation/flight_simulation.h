@@ -16,7 +16,7 @@ class FlightSimulation
 public:
     explicit FlightSimulation(std::unique_ptr<ControlLoop> loop, double dt, QObject *parent = nullptr);
 
-    float pitch() const {return _pitch};
+    float pitch() const { return _pitch; };
 
 signals:
     void pitchChanged(double newPitch);
@@ -24,7 +24,7 @@ signals:
 private:
     std::unique_ptr<ControlLoop> _control_loop;
     
-    double  {0.01};
+    double  _dt {0.01};
     double _pitch;
 
     QTimer _simulation_timer;

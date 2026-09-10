@@ -18,15 +18,15 @@ endif()
 
 qt_add_executable(appFlightLaboratory
     src/main.cpp
-    src/virtual_pilot/roll_sin_pilot.h
-    src/virtual_pilot/roll_sin_pilot.cpp
-    src/pitchmodel.h
-    src/pitchmodel.cpp
 )
 
 target_include_directories(appFlightLaboratory PRIVATE
     src
+    src/flight_simulation/
     src/virtual_pilot
+    src/control/
+    src/control/controllers/
+    src/control/loops/
 )
 
 qt_add_qml_module(appFlightLaboratory
@@ -40,12 +40,21 @@ qt_add_qml_module(appFlightLaboratory
         src/qml/PIDLab.qml
 
     SOURCES
-        src/pid.h
-        src/pid.cpp
         src/virtual_pilot/virtual_pilot.h
         src/virtual_pilot/virtual_pilot.cpp
         src/virtual_pilot/roll_sin_pilot.h
         src/virtual_pilot/roll_sin_pilot.cpp
+        src/virtual_pilot/pitch_step_pilot.h
+        src/virtual_pilot/pitch_step_pilot.cpp
+
+        src/control/loops/pid_control_loop.h
+        src/control/loops/pid_control_loop.cpp
+        src/control/loops/control_loop.h
+        src/control/controllers/pid.cpp
+        src/control/controllers/pid.h
+
+        src/flight_simulation/flight_simulation.h
+        src/flight_simulation/flight_simulation.cpp
 )
 
 set_target_properties(appFlightLaboratory PROPERTIES

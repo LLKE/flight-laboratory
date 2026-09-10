@@ -7,8 +7,8 @@ import FlightLaboratory as FL
 Item {
     anchors.fill: parent
 
-    FL.RollSinPilot {
-        id: cosDynamicsSim
+    FL.FlightSimulation {
+        id: flight_sim
     }
 
     GridLayout {
@@ -19,7 +19,7 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
 
-            roll: cosDynamicsSim.roll
+            roll: flight_sim.pitch
             pitch: 0
         }
     }

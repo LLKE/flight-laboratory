@@ -1,6 +1,10 @@
+#include <memory>
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "virtual_pilot/roll_sin_pilot.h"
+
+#include "flight_simulation/flight_simulation.h"
+#include "control/loops/pid_control_loop.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +19,8 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
 
     engine.loadFromModule("FlightLaboratory", "Main");
-    RollSinPilot* rollGenerator = new RollSinPilot();
+    std::unique_ptr<pidControlLoop> loop = std::make_unique<pidControlLoop>();
+    FlightSimulation* flightSimulation = new FlightSimulation(loop, 0.01);
 
     return QGuiApplication::exec();
 }

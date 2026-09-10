@@ -7,8 +7,8 @@ class ControlLoop {
 public:
     ControlLoop();  
 
-    virtual void update(double dt) = 0;
 protected:
-}
+    virtual void update(double dt) = 0;
+};
 
 #endif // CONTROL_LOOP_H

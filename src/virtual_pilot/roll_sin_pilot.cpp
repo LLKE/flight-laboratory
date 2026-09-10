@@ -1,21 +1,12 @@
 #include "roll_sin_pilot.h"
 
-RollSinPilot::RollSinPilot(QObject *parent)
-    : QObject(parent),
-    m_frequency(1.0),
+RollSinPilot::RollSinPilot()
+    : m_frequency(1.0),
     m_amplitude(20.0),
     m_roll(0.0),
     m_currentTime(0.0),
     m_timeStep(0.02)
-{
-    rollUpdateTimer = new QTimer(this); // Pass "this" as parent for memory management
-
-    // connect timer with its timeout signal to RollSinPilot with its simRollSin function
-    connect(rollUpdateTimer, &QTimer::timeout, this, &RollSinPilot::simRollSin);
-
-    rollUpdateTimer->setInterval(20);
-    rollUpdateTimer->start();
-}
+{}
 
 void RollSinPilot::simRollSin() {
     const double PI = std::acos(-1);
