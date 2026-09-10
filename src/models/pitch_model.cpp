@@ -4,9 +4,7 @@ PitchModel::PitchModel(float elevator_eff, float pitch_damping, float timestep)
     : _elevator_effectiveness(elevator_eff), _pitch_damping(pitch_damping)
 {}
 
-void PitchModel::calc_value(const float elevator_deflection, const float time) {
-
-    const float timestep = time - _timestep_prev;
+void PitchModel::calc_value(const float elevator_deflection, const float timestep) {
 
     // Elevator deflection creates a pitching moment, causing pitch acceleration
     float pitch_accel = _elevator_effectiveness * elevator_deflection - _pitch_damping * _state_prev.pitch_rate;

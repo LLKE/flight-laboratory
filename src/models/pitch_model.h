@@ -6,13 +6,13 @@ class PitchModel
 public:
     PitchModel(float elevator_eff, float pitch_damping, float timestep);
 
-    double getValue(const float elevator_deflection, const float time) { calc_value(elevator_deflection, time); return _state.pitch; };
+    double getValue(const float elevator_deflection, const float timestep) { calc_value(elevator_deflection, timestep); return _state.pitch; };
 
     double getPrevValue() { return _state_prev.pitch; };
 
 private:
 
-    void calc_value(const float elevator_deflection, const float time);
+    void calc_value(const float elevator_deflection, const float timestep);
 
     float _pitch_damping {};
     float _elevator_effectiveness {};
