@@ -20,7 +20,8 @@ int main(int argc, char *argv[])
 
     engine.loadFromModule("FlightLaboratory", "Main");
     std::unique_ptr<pidControlLoop> loop = std::make_unique<pidControlLoop>();
-    FlightSimulation* flightSimulation = new FlightSimulation(loop, 0.01);
+    double dt = 0.01;
+    FlightSimulation flightSimulation (std::move(loop), dt);
 
     return QGuiApplication::exec();
 }
