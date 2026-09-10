@@ -9,7 +9,7 @@ public:
 protected:
     float setpoint {};
 
-    virtual float generate_setpoint() = 0;
+    virtual float generate_setpoint(double dt) = 0;
 };
 
 #endif // VIRTUAL_PILOT_H
