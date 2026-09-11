@@ -40,7 +40,7 @@ private:
 
     std::unique_ptr<ControlLoop> _control_loop;
     double _dt {0.01};
-    double _pitch {0.0};
+    float _pitch {0.0};
     QString _controlLoopType {"pid"};
     QTimer _simulation_timer;
 };

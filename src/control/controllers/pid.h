@@ -1,6 +1,7 @@
 #ifndef PID_H
 #define PID_H
 #include <vector>
+#include <iostream>
 
 class PIDController
 {
@@ -11,7 +12,7 @@ public:
         { calcControlCommand(setpoint, actual, dt); return _control_command; };
 
 private:
-    float calcControlCommand(const float setpoint, const float measurement, const float dt);
+    void calcControlCommand(const float setpoint, const float measurement, const float dt);
 
     const float _p;
     const float _i;

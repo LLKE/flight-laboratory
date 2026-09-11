@@ -2,7 +2,7 @@
 
 
 PitchStepPilot::PitchStepPilot() :
-_delay(0), _magnitude(1)
+_delay(0), _magnitude(30)
 {}
 
 PitchStepPilot::PitchStepPilot(float delay, float magnitude) :

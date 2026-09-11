@@ -11,6 +11,10 @@ Item {
         id: flight_sim
         controlLoopType: "pid"
         dt: 0.01
+
+        onPitchChanged: {
+            console.log(pitch)
+        }
     }
 
     GridLayout {
@@ -21,8 +25,8 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
 
-            roll: flight_sim.pitch
-            pitch: 0
+            pitch: flight_sim.pitch
+            roll: 0
         }
     }
 }

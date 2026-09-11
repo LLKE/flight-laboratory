@@ -8,6 +8,7 @@ FlightSimulation::FlightSimulation(QObject *parent)
     _simulation_timer.setInterval(_dt * 1000);
     connect(&_simulation_timer, &QTimer::timeout, this, &FlightSimulation::update);
     makeControlLoop(_controlLoopType);
+    _simulation_timer.start();
 }
 
 void FlightSimulation::setDt(double dt)
@@ -34,16 +35,15 @@ void FlightSimulation::setControlLoopType(const QString &type)
 
 void FlightSimulation::makeControlLoop(const QString &type)
 {
-    if (type == "pid") {
-        _control_loop = std::make_unique<pidControlLoop>();
-    } else {
-        _control_loop = std::make_unique<pidControlLoop>();
-    }
+    Q_UNUSED(type);
+    _control_loop = std::make_unique<pidControlLoop>();
 }
 
 void FlightSimulation::update()
 {
     if (_control_loop) {
-        _control_loop->update(_dt);
+        const float pitch_value = _control_loop->update(_dt);
+        _pitch = pitch_value;
+        emit pitchChanged(_pitch);
     }
 }

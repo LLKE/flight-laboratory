@@ -7,7 +7,7 @@ class ControlLoop {
 public:
     ControlLoop() {};  
 
-    virtual void update(double dt) = 0;
+    virtual float update(double dt) = 0;
 };
 
 #endif // CONTROL_LOOP_H

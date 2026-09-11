@@ -12,13 +12,13 @@ class pidControlLoop : public ControlLoop {
 public:
     pidControlLoop();
     
-    void update(double dt) override;
+    float update(double dt) override;
 
 private:
 
     PitchStepPilot _step_pilot {};
-    PIDController _pid_controller {{}, 1.0, 1.0, 1.0};
-    PitchModel _model {0.5, 0.9, 0.01};
+    PIDController _pid_controller {{}, 1000.0, 100.0, 0.0};
+    PitchModel _model {0.9, 0.1, 0.01};
 };
 
 #endif
