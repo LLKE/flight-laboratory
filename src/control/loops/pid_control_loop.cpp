@@ -1,6 +1,6 @@
 #include "pid_control_loop.h"
 
-pidControlLoop::pidControlLoop() {}
+pidControlLoop::pidControlLoop(){}
 
 void pidControlLoop::update(double dt) {
     const float setpoint = _step_pilot.generate_setpoint(dt);

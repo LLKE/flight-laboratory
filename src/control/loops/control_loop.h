@@ -5,7 +5,7 @@
 class ControlLoop {
 
 public:
-    ControlLoop();  
+    ControlLoop() {};  
 
     virtual void update(double dt) = 0;
 };

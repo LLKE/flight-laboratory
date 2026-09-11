@@ -1,4 +1,4 @@
-#include "pitchmodel.h"
+#include "pitch_model.h"
 
 PitchModel::PitchModel(float elevator_eff, float pitch_damping, float timestep)
     : _elevator_effectiveness(elevator_eff), _pitch_damping(pitch_damping)

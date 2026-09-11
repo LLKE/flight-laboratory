@@ -10,15 +10,15 @@
 class pidControlLoop : public ControlLoop {
 
 public:
-    pidControlLoop() {};
+    pidControlLoop();
     
     void update(double dt) override;
 
 private:
 
     PitchStepPilot _step_pilot {};
-    PIDController _pid_controller;
-    PitchModel _model;
+    PIDController _pid_controller {{}, 1.0, 1.0, 1.0};
+    PitchModel _model {0.5, 0.9, 0.01};
 };
 
 #endif

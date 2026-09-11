@@ -18,7 +18,7 @@ private:
     float _elevator_effectiveness {};
     float _timestep_prev {};
 
-    struct State{
+    struct State {
         float pitch;
         float pitch_rate;
     };

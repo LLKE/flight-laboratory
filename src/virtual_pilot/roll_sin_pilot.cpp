@@ -12,5 +12,4 @@ void RollSinPilot::simRollSin() {
     const double PI = std::acos(-1);
     m_roll = m_amplitude * qSin(2 * PI * m_frequency * m_currentTime);
     m_currentTime += m_timeStep;
-    emit rollChanged(m_roll);
 }

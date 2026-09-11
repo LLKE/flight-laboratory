@@ -27,6 +27,7 @@ target_include_directories(appFlightLaboratory PRIVATE
     src/control/
     src/control/controllers/
     src/control/loops/
+    src/models/
 )
 
 qt_add_qml_module(appFlightLaboratory
@@ -55,6 +56,9 @@ qt_add_qml_module(appFlightLaboratory
 
         src/flight_simulation/flight_simulation.h
         src/flight_simulation/flight_simulation.cpp
+
+        src/models/pitch_model.h
+        src/models/pitch_model.cpp
 )
 
 set_target_properties(appFlightLaboratory PROPERTIES

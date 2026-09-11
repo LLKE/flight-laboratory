@@ -12,19 +12,15 @@ public:
     explicit RollSinPilot();
 
     float roll() const { return m_roll; }
-
-private slots:
-    void simRollSin();
-
-signals:
-    void rollChanged(double newRoll);
-
+    
 private:
     float m_roll {};
     float m_frequency {};
     float m_amplitude {};
     float m_timeStep {};
     float m_currentTime {};
+    
+    void simRollSin();
 };
 
 #endif // ROLLSINPILOT_H
