@@ -9,6 +9,8 @@ Item {
 
     FL.FlightSimulation {
         id: flight_sim
+        controlLoopType: "pid"
+        dt: 0.01
     }
 
     GridLayout {
