@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Basic
 
+import QtCharts
+
 import FlightLaboratory as FL
 
 Item {
@@ -15,6 +17,16 @@ Item {
 
     RowLayout {
         anchors.fill: parent
+
+        Item {
+            id: controlChart
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            
+            ChartView {
+                id: chart
+            }
+        }
 
         ArtificialHorizion {
             visible: true
