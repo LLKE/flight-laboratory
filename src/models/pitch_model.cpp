@@ -1,6 +1,6 @@
 #include "pitch_model.h"
 
-PitchModel::PitchModel(float elevator_eff, float pitch_damping, float timestep)
+PitchModel::PitchModel(float elevator_eff, float pitch_damping)
     : _elevator_effectiveness(elevator_eff), _pitch_damping(pitch_damping)
 {}
 
@@ -13,4 +13,5 @@ void PitchModel::calc_value(const float elevator_deflection, const float timeste
     _state.pitch = _state_prev.pitch + _state.pitch_rate * timestep;
 
     _timestep_prev = timestep;
+    _state_prev = _state;
 }

@@ -4,7 +4,7 @@
 class PitchModel
 {
 public:
-    PitchModel(float elevator_eff, float pitch_damping, float timestep);
+    PitchModel(float elevator_eff, float pitch_damping);
 
     double getValue(const float elevator_deflection, const float timestep) { calc_value(elevator_deflection, timestep); return _state.pitch; };
 

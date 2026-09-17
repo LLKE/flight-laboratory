@@ -17,8 +17,8 @@ public:
 private:
 
     PitchStepPilot _step_pilot {};
-    PIDController _pid_controller {{}, 1000.0, 100.0, 0.0};
-    PitchModel _model {0.9, 0.1, 0.01};
+    PIDController _pid_controller {{}, 0.6, 1.0, 0.9};
+    PitchModel _model {0.45, 0.5};
 };
 
 #endif

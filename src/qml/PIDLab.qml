@@ -11,13 +11,9 @@ Item {
         id: flight_sim
         controlLoopType: "pid"
         dt: 0.01
-
-        onPitchChanged: {
-            console.log(pitch)
-        }
     }
 
-    GridLayout {
+    RowLayout {
         anchors.fill: parent
 
         ArtificialHorizion {

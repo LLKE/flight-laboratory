@@ -6,6 +6,7 @@ PIDController::PIDController(std::vector<float> actuator_constraints, float p, f
 
 void PIDController::calcControlCommand(const float setpoint, const float measurement, const float dt) {
     const float error = setpoint - measurement;
+    std::cout << "Error: " << error << "\n";
     _integral += error * dt;
     
     _control_command = _p * error + _i * _integral + _d * (error - _error_prev) / dt;
