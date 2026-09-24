@@ -180,6 +180,7 @@ Item {
         spacing: 2 * indicationUnitSpacing
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
+        rotation: roll
 
         Column {
             id: pitchLadderUp
