@@ -15,6 +15,7 @@ class FlightSimulation : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(double pitch READ pitch NOTIFY pitchChanged)
+    Q_PROPERTY(double setpoint READ setpoint NOTIFY setpointChanged)
     Q_PROPERTY(QString controlLoopType READ controlLoopType WRITE setControlLoopType NOTIFY controlLoopTypeChanged)
     Q_PROPERTY(double dt READ dt WRITE setDt NOTIFY dtChanged)
     QML_ELEMENT
@@ -24,6 +25,7 @@ public:
 
     double pitch() const { return _pitch; }
     double dt() const { return _dt; }
+    double setpoint() const { return _setpoint; }
     QString controlLoopType() const { return _controlLoopType; }
 
     void setDt(double dt);
@@ -32,6 +34,7 @@ public:
 signals:
     void pitchChanged(double newPitch);
     void dtChanged(double newDt);
+    void setpointChanged(double newSetpoint);
     void controlLoopTypeChanged();
 
 private:
@@ -41,6 +44,7 @@ private:
     std::unique_ptr<ControlLoop> _control_loop;
     double _dt {0.01};
     float _pitch {0.0};
+    double _setpoint {0.0};
     QString _controlLoopType {"pid"};
     QTimer _simulation_timer;
 };

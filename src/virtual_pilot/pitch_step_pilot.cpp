@@ -9,7 +9,8 @@ PitchStepPilot::PitchStepPilot(float delay, float magnitude) :
 _delay(delay), _magnitude(magnitude)
 {}
 
-float PitchStepPilot::generate_setpoint(double dt) {
+float PitchStepPilot::generateSetpoint(double dt) {
     _current_time += dt;
-    return (_current_time >= _delay) ? _magnitude : 0.0;
+    _setpoint = (_current_time >= _delay) ? _magnitude : 0.0;
+    return _setpoint;
 }

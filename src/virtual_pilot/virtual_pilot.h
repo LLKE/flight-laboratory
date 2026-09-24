@@ -5,11 +5,12 @@ class VirtualPilot
 {
 public:
     VirtualPilot();
+    virtual float generateSetpoint(double dt) = 0;
+    virtual float getSetpoint() = 0;
 
 protected:
-    float setpoint {};
+    float _setpoint {};
 
-    virtual float generate_setpoint(double dt) = 0;
 };
 
 #endif // VIRTUAL_PILOT_H

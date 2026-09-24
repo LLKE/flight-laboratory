@@ -13,11 +13,12 @@ public:
     pidControlLoop();
     
     float update(double dt) override;
+    float getSetpoint() override;
 
 private:
 
     PitchStepPilot _step_pilot {};
-    PIDController _pid_controller {{}, 0.6, 1.0, 0.9};
+    PIDController _pid_controller {{}, 1.5, 0.05, 0.4};
     PitchModel _model {0.45, 0.5};
 };
 

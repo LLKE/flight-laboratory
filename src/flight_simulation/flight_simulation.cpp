@@ -44,6 +44,8 @@ void FlightSimulation::update()
     if (_control_loop) {
         const float pitch_value = _control_loop->update(_dt);
         _pitch = pitch_value;
+        _setpoint = _control_loop->getSetpoint();
         emit pitchChanged(_pitch);
+        emit setpointChanged(_setpoint);
     }
 }

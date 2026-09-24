@@ -10,11 +10,14 @@ class PitchStepPilot : public VirtualPilot
 public:
     PitchStepPilot();
     PitchStepPilot(float delay, float magnitude); 
-    float generate_setpoint(double dt) override;
-
+    
+    float getSetpoint() { return _setpoint; }
+    float generateSetpoint(double dt) override;
+    
+private: 
+    
 private: 
 
-private: 
     float _magnitude {};
     float _delay {};
     float _current_time {};

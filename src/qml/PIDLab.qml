@@ -25,6 +25,17 @@ Item {
                 xAxis.max = timeTracker.simTime
             }
         }
+
+        onSetpointChanged: {
+            timeTracker.simTime += flight_sim.dt
+            targetSeries.append(timeTracker.simTime, flight_sim.setpoint)
+            
+            // Keep dynamic rolling window
+            if (timeTracker.simTime > xAxis.max) {
+                xAxis.min = timeTracker.simTime - 10.0
+                xAxis.max = timeTracker.simTime
+            }
+        }
     }
 
     QtObject {
