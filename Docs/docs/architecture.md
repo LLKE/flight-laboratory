@@ -26,3 +26,5 @@ This controls all the flight logic.
 ### PIDLab
 
 ![Block Diagram](media/pid.drawio.svg)
+
+As the name suggests, PIDLab uses a [PID controller](/Docs/docs/control/pid.md). 
