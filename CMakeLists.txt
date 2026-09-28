@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 REQUIRED COMPONENTS
     Quick
     QuickEffects
+    Widgets
 )
 
 qt_standard_project_setup(REQUIRES 6.10)
@@ -18,15 +19,16 @@ endif()
 
 qt_add_executable(appFlightLaboratory
     src/main.cpp
-    src/virtual_pilot/roll_sin_pilot.h
-    src/virtual_pilot/roll_sin_pilot.cpp
-    src/pitchmodel.h
-    src/pitchmodel.cpp
 )
 
 target_include_directories(appFlightLaboratory PRIVATE
     src
+    src/flight_simulation/
     src/virtual_pilot
+    src/control/
+    src/control/controllers/
+    src/control/loops/
+    src/models/
 )
 
 qt_add_qml_module(appFlightLaboratory
@@ -40,12 +42,24 @@ qt_add_qml_module(appFlightLaboratory
         src/qml/PIDLab.qml
 
     SOURCES
-        src/pid.h
-        src/pid.cpp
         src/virtual_pilot/virtual_pilot.h
         src/virtual_pilot/virtual_pilot.cpp
         src/virtual_pilot/roll_sin_pilot.h
         src/virtual_pilot/roll_sin_pilot.cpp
+        src/virtual_pilot/pitch_step_pilot.h
+        src/virtual_pilot/pitch_step_pilot.cpp
+
+        src/control/loops/pid_control_loop.h
+        src/control/loops/pid_control_loop.cpp
+        src/control/loops/control_loop.h
+        src/control/controllers/pid.cpp
+        src/control/controllers/pid.h
+
+        src/flight_simulation/flight_simulation.h
+        src/flight_simulation/flight_simulation.cpp
+
+        src/models/pitch_model.h
+        src/models/pitch_model.cpp
 )
 
 set_target_properties(appFlightLaboratory PROPERTIES
@@ -59,6 +73,7 @@ target_link_libraries(appFlightLaboratory
     PRIVATE
         Qt6::Quick
         Qt6::QuickEffects
+        Qt6::Widgets
 )
 
 install(TARGETS appFlightLaboratory

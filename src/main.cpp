@@ -1,10 +1,9 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
-#include "virtual_pilot/roll_sin_pilot.h"
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
     QObject::connect(
@@ -15,7 +14,6 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
 
     engine.loadFromModule("FlightLaboratory", "Main");
-    RollSinPilot* rollGenerator = new RollSinPilot();
 
     return QGuiApplication::exec();
 }
