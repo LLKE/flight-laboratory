@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://LLKE.github.io/flight-laboratory/control/pid/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>PID Controller - Flight Laboratory</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "PID Controller";
+        var mkdocs_page_input_path = "control/pid.md";
+        var mkdocs_page_url = "/flight-laboratory/control/pid/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Flight Laboratory
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Developer Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../development/">Choosing an Editor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../dev-guide/setup-build-qt-creator/">Working in Qt-Creator</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../dev-guide/setup-build-vscode/">Working in VSCode</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../architecture/">Architecture</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../components/">Components</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Control</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">PID Controller</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-a-pid-controller-is">What a PID controller is</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#meaning-of-the-parameters">Meaning of the parameters</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#proportional-gain-k_p">Proportional gain $K_p$</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#integral-gain-k_i">Integral gain $K_i$</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#derivative-gain-k_d">Derivative gain $K_d$</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-the-implementation-works">How the implementation works</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#role-of-each-stored-value">Role of each stored value</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#use-in-the-flight-laboratory-loop">Use in the Flight Laboratory loop</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#notes-about-the-current-implementation">Notes about the current implementation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../virtual-pilot/">Virtual Pilot</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Physics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../physics/pitch-dynamics-model/">Pitch Dynamics Model</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Flight Laboratory</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Control</li>
+      <li class="breadcrumb-item active">PID Controller</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/LLKE/flight-laboratory/edit/master/docs/control/pid.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="pid-controller">PID Controller</h1>
+<h2 id="what-a-pid-controller-is">What a PID controller is</h2>
+<p>A PID controller is a feedback controller used to make a system follow a target value, called the setpoint. It does this by measuring the current value, comparing it to the setpoint, and computing a corrective control signal.</p>
+<p>The error is defined as:</p>
+<p>$$
+error = setpoint - measurement
+$$</p>
+<p>The controller then combines three effects:</p>
+<ul>
+<li>Proportional: reacts to the current error</li>
+<li>Integral: accumulates past error over time</li>
+<li>Derivative: reacts to how quickly the error is changing</li>
+</ul>
+<p>The total control signal is:</p>
+<p>$$
+control = K_p \cdot error + K_i \cdot \int error\,dt + K_d \cdot \frac{de}{dt}
+$$</p>
+<p>This is the standard form of a PID controller, and the implementation in this project follows that structure.</p>
+<h2 id="meaning-of-the-parameters">Meaning of the parameters</h2>
+<p>Each parameter changes how strongly one part of the controller reacts:</p>
+<h3 id="proportional-gain-k_p">Proportional gain $K_p$</h3>
+<p>This term responds immediately to the current error. A larger $K_p$ gives a stronger correction and usually makes the system react faster, but it can also cause overshoot or oscillation.</p>
+<h3 id="integral-gain-k_i">Integral gain $K_i$</h3>
+<p>This term accumulates error over time. It helps remove a constant offset that remains even after a proportional response. A larger $K_i$ increases the correction for persistent error, but it can also make the system slower or more oscillatory if it is too high.</p>
+<h3 id="derivative-gain-k_d">Derivative gain $K_d$</h3>
+<p>This term reacts to the rate at which the error changes. It adds damping and helps reduce oscillation, but it is sensitive to noise and changes quickly when the error moves rapidly.</p>
+<h2 id="how-the-implementation-works">How the implementation works</h2>
+<p>The implementation in <code>src/control/controllers/pid.h</code> and <code>src/control/controllers/pid.cpp</code> is a discrete-time PID controller. In other words, it updates once per time step with a time interval <code>dt</code>.</p>
+<p>The calculation is performed in <code>calcControlCommand</code>:</p>
+<pre><code class="language-cpp">const float error = setpoint - measurement;
+_integral += error * dt;
+
+_control_command = _p * error + _i * _integral + _d * (error - _error_prev) / dt;
+_error_prev = error;
+</code></pre>
+<p>This matches the discrete PID structure:</p>
+<ul>
+<li><code>error</code> is the current difference between target and measured value</li>
+<li><code>_integral += error * dt</code> accumulates the error over time</li>
+<li><code>(error - _error_prev) / dt</code> approximates the derivative of the error</li>
+<li>the three terms are added to form the final command</li>
+</ul>
+<h2 id="role-of-each-stored-value">Role of each stored value</h2>
+<p>The controller stores several internal values:</p>
+<pre><code class="language-cpp">const float _p;
+const float _i;
+const float _d;
+
+float _control_command {};
+float _error_prev {};
+float _integral {};
+</code></pre>
+<p>These are used as follows:</p>
+<ul>
+<li><code>_p</code>, <code>_i</code>, <code>_d</code> store the gain values</li>
+<li><code>_integral</code> accumulates the error over time</li>
+<li><code>_error_prev</code> stores the previous error so the derivative can be estimated</li>
+<li><code>_control_command</code> stores the output of the current update step</li>
+</ul>
+<h2 id="use-in-the-flight-laboratory-loop">Use in the Flight Laboratory loop</h2>
+<p>The controller is used inside the PID control loop in <code>src/control/loops/pid_control_loop.cpp</code>:</p>
+<pre><code class="language-cpp">const float setpoint = _step_pilot.generateSetpoint(dt);
+const float measurement = _model.getPrevValue();
+const float control_command = _pid_controller.getControlCommand(setpoint, measurement, dt);
+const float pitch_value = _model.getValue(control_command, dt);
+</code></pre>
+<p>This means:</p>
+<ol>
+<li>the <a href="/Docs/docs/control/virtual-pilot.md">virtual pilot</a> generates a target value,</li>
+<li>the current model value is measured,</li>
+<li>the PID controller computes a corrective signal,</li>
+<li>the model updates using that signal.</li>
+</ol>
+<p>In other words, the PID loop is regulating the simulated pitch value toward the commanded setpoint.</p>
+<h2 id="notes-about-the-current-implementation">Notes about the current implementation</h2>
+<p>The constructor also accepts actuator constraints:</p>
+<pre><code class="language-cpp">PIDController(std::vector&lt;float&gt; actuator_constraints, float p, float i, float d);
+</code></pre>
+<p>These are stored in <code>_actuator_constraints</code>, but in the current implementation they are not used to limit or clamp the output value during the control calculation.</p>
+<h2 id="summary">Summary</h2>
+<p>A PID controller is a standard feedback method for reducing the difference between the desired value and the measured value. In this project, the controller computes the error, accumulates it for the integral term, estimates its rate of change for the derivative term, and combines all three parts into one control command.</p>
+<p>The result is a standard discrete PID control law that is applied directly in the simulation loop to drive the pitch model toward the desired setpoint.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../components/" class="btn btn-neutral float-left" title="Components"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../virtual-pilot/" class="btn btn-neutral float-right" title="Virtual Pilot">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/LLKE/flight-laboratory" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../../components/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../virtual-pilot/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
