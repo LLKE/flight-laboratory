@@ -24,6 +24,7 @@ nav:
   - Components: components.md
   - Control:
     - PID Controller: control/pid.md
+    - Virtual Pilot: control/virtual-pilot.md
   - Physics: 
     - Pitch Dynamics Model: physics/pitch-dynamics-model.md
   
