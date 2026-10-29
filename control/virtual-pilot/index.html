@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://LLKE.github.io/flight-laboratory/control/virtual-pilot/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Virtual Pilot - Flight Laboratory</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Virtual Pilot";
+        var mkdocs_page_input_path = "control/virtual-pilot.md";
+        var mkdocs_page_url = "/flight-laboratory/control/virtual-pilot/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Flight Laboratory
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Developer Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../development/">Choosing an Editor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../dev-guide/setup-build-qt-creator/">Working in Qt-Creator</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../dev-guide/setup-build-vscode/">Working in VSCode</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../architecture/">Architecture</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../components/">Components</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Control</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../pid/">PID Controller</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Virtual Pilot</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#contract">Contract</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pitch-step-pilot">Pitch Step Pilot</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#adding-a-pilot">Adding a Pilot</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#current-roll-pilot-status">Current Roll Pilot Status</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Physics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../physics/pitch-dynamics-model/">Pitch Dynamics Model</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Flight Laboratory</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Control</li>
+      <li class="breadcrumb-item active">Virtual Pilot</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/LLKE/flight-laboratory/edit/master/docs/control/virtual-pilot.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="virtual-pilot">Virtual Pilot</h1>
+<p>A virtual pilot is a software component that produces a setpoint for a downstream part of the flight-control pipeline. It replaces the pilot's setpoint input with a repeatable signal, which is useful for simulations, controller experiments, and other applications that need a commanded value.</p>
+<h2 id="contract">Contract</h2>
+<p><a href="../../../src/virtual_pilot/virtual_pilot.h"><code>VirtualPilot</code></a> is the abstract base class. A concrete pilot implements:</p>
+<ul>
+<li><code>generateSetpoint(double dt)</code>, which advances its internal state by the elapsed simulation time and returns the current setpoint.</li>
+<li><code>getSetpoint()</code>, which returns the latest setpoint without advancing the pilot.</li>
+</ul>
+<p>The base class stores the latest value in <code>_setpoint</code>. The interface uses <code>float</code> values, so the meaning and units of a setpoint are established by the consumer. In PID Lab, for example, the pitch control loop uses the pilot's value as the controller target.</p>
+<p><code>dt</code> is in seconds in the current simulation. <code>FlightSimulation</code> defaults to a <code>dt</code> of <code>0.01</code> and uses it both to schedule updates and as the timestep passed through the control loop. A pilot should use the supplied timestep rather than assuming a fixed update rate.</p>
+<h2 id="pitch-step-pilot">Pitch Step Pilot</h2>
+<p><a href="../../../src/virtual_pilot/pitch_step_pilot.h"><code>PitchStepPilot</code></a> generates a step signal. It accumulates each supplied <code>dt</code>; before the configured delay has elapsed, the setpoint is zero, and at or after the delay it becomes the configured magnitude. The value remains at that magnitude on subsequent calls.</p>
+<p>The default constructor configures a delay of zero and a magnitude of <code>30</code>. The two-argument constructor accepts <code>(delay, magnitude)</code>. Both values are currently plain floats; the caller is responsible for choosing a delay in seconds and a magnitude in the units expected by its consumer.</p>
+<p>The PID control loop calls <code>generateSetpoint(dt)</code> once per update, supplies the returned value to the PID controller, then exposes the pilot's current setpoint to the simulation. This keeps setpoint generation separate from control and plant dynamics.</p>
+<h2 id="adding-a-pilot">Adding a Pilot</h2>
+<p>Derive from <code>VirtualPilot</code> and implement both methods. Keep time-dependent state inside the pilot, advance it using <code>dt</code>, and update <code>_setpoint</code> before returning the result. Consumers can then hold a concrete pilot or use it behind the common interface, and read its value without advancing its state.</p>
+<p>For example, a future sinusoidal pilot could calculate a new value from its phase and elapsed time in <code>generateSetpoint(dt)</code>, while <code>getSetpoint()</code> simply returns the most recently generated value.</p>
+<h2 id="current-roll-pilot-status">Current Roll Pilot Status</h2>
+<p><a href="../../../src/virtual_pilot/roll_sin_pilot.h"><code>RollSinPilot</code></a> is not currently an implementation of the <code>VirtualPilot</code> contract: it does not override <code>generateSetpoint</code> or <code>getSetpoint</code>, and its <code>simRollSin()</code> helper is private and is not called by the class. Its roll signal generation should therefore be considered incomplete and it is not currently used by the control-loop pipeline.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../pid/" class="btn btn-neutral float-left" title="PID Controller"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../physics/pitch-dynamics-model/" class="btn btn-neutral float-right" title="Pitch Dynamics Model">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/LLKE/flight-laboratory" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../pid/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../physics/pitch-dynamics-model/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
