@@ -6,9 +6,9 @@ A PID controller is a feedback controller used to make a system follow a target 
 
 The error is defined as:
 
-$$
+```text
 error = setpoint - measurement
-$$
+```
 
 The controller then combines three effects:
 
@@ -18,9 +18,9 @@ The controller then combines three effects:
 
 The total control signal is:
 
-$$
-control = K_p \cdot error + K_i \cdot \int error\,dt + K_d \cdot \frac{de}{dt}
-$$
+```text
+control = Kp * error + Ki * ∫ error dt + Kd * change in error per time step
+```
 
 This is the standard form of a PID controller, and the implementation in this project follows that structure.
 
@@ -28,15 +28,15 @@ This is the standard form of a PID controller, and the implementation in this pr
 
 Each parameter changes how strongly one part of the controller reacts:
 
-### Proportional gain $K_p$
+### Proportional gain Kp
 
-This term responds immediately to the current error. A larger $K_p$ gives a stronger correction and usually makes the system react faster, but it can also cause overshoot or oscillation.
+This term responds immediately to the current error. A larger Kp gives a stronger correction and usually makes the system react faster, but it can also cause overshoot or oscillation.
 
-### Integral gain $K_i$
+### Integral gain Ki
 
-This term accumulates error over time. It helps remove a constant offset that remains even after a proportional response. A larger $K_i$ increases the correction for persistent error, but it can also make the system slower or more oscillatory if it is too high.
+This term accumulates error over time. It helps remove a constant offset that remains even after a proportional response. A larger Ki increases the correction for persistent error, but it can also make the system slower or more oscillatory if it is too high.
 
-### Derivative gain $K_d$
+### Derivative gain Kd
 
 This term reacts to the rate at which the error changes. It adds damping and helps reduce oscillation, but it is sensitive to noise and changes quickly when the error moves rapidly.
 
