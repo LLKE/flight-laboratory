@@ -10,8 +10,32 @@ Item {
     id: root
     visible: true
 
+    /**
+    * Artificial horizon attitude convention:
+    *
+    * roll:
+    *   Degrees.
+    *   Positive = right wing down.
+    *
+    * pitch:
+    *   Degrees.
+    *   Positive = nose up.
+    *
+    * Display convention:
+    *   The aircraft reference remains fixed.
+    *   The attitude background moves relative to it.
+    */
+
     property real roll: 0.0
     property real pitch: 0.0
+
+    onRollChanged: {
+        canvas.requestPaint()
+    }
+
+    onPitchChanged: {
+        canvas.requestPaint()
+    }
 
     Rectangle {
         id: instrumentDial
@@ -23,16 +47,6 @@ Item {
         Canvas {
             id: canvas
             anchors.fill: parent
-
-            Timer {
-                interval: 16 // ~60 FPS (1000ms / 60)
-                running: true
-                repeat: true
-                onTriggered: {
-                    // Update your angles here if needed, then request a redraw
-                    canvas.requestPaint()
-                }
-            }
 
             onPaint: {
                 var ctx = getContext("2d");
