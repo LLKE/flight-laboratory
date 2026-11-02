@@ -29,6 +29,7 @@ Item {
     property real roll: 0.0
     property real pitch: 0.0
 
+
     onRollChanged: {
         canvas.requestPaint()
     }
@@ -38,59 +39,107 @@ Item {
     }
 
     Rectangle {
+
         id: instrumentDial
         anchors.centerIn: parent
         width: Math.min(root.width, root.height) - 40
         height: width
         radius: width/2
 
-        Canvas {
-            id: canvas
+        Item {
+            id: attitudeClip
+
             anchors.fill: parent
+            
+            clip: true
 
-            onPaint: {
-                var ctx = getContext("2d");
-                var bezel_width = 10;
-                var bezel_radius = (canvas.width / 2);
+            Item {
+                id: attitudeLayer
 
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                anchors.fill: parent
 
-                // Circular viewport
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2, 0, 2*Math.PI);
-                ctx.clip();
+                Canvas {
+                    id: canvas
+                    anchors.fill: parent
 
-                // Move origin to centre
-                ctx.translate(canvas.width/2, canvas.height/2);
+                    onPaint: {
+                        var ctx = getContext("2d");
+                        var bezel_width = 10;
+                        var bezel_radius = (canvas.width / 2);
 
-                ctx.save();
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                // Roll
-                ctx.rotate(-roll * Math.PI / 180);
+                        // Circular viewport
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2, 0, 2*Math.PI);
+                        ctx.clip();
 
-                // Pitch
-                ctx.translate(0, calcHorizonShift(pitch));
+                        // Move origin to centre
+                        ctx.translate(canvas.width/2, canvas.height/2);
 
-                // Draw sky
-                ctx.fillStyle = "#0689e4";
-                ctx.fillRect(-canvas.width, -canvas.height*2, canvas.width*2, canvas.height*2);
+                        ctx.save();
 
-                // Draw ground
-                ctx.fillStyle = "#A66b26";
-                ctx.fillRect(-canvas.width, 0, canvas.width*2, canvas.height*2);
+                        // Roll
+                        ctx.rotate(-roll * Math.PI / 180);
 
-                ctx.restore()
+                        // Pitch
+                        ctx.translate(0, calcHorizonShift(pitch));
 
-                // Draw bezel
-                ctx.beginPath();
-                ctx.arc(0, 0, bezel_radius, 0, 2 * Math.PI, false)
+                        // Draw sky
+                        ctx.fillStyle = "#0689e4";
+                        ctx.fillRect(-canvas.width, -canvas.height*2, canvas.width*2, canvas.height*2);
 
-                ctx.lineWidth = bezel_width;
-                ctx.strokeStyle = Qt.rgba(1, 2, 3, 4)
-                ctx.stroke();
+                        // Draw ground
+                        ctx.fillStyle = "#A66b26";
+                        ctx.fillRect(-canvas.width, 0, canvas.width*2, canvas.height*2);
 
-                ctx.restore();
+                        ctx.restore()
+
+                        // Draw bezel
+                        ctx.beginPath();
+                        ctx.arc(0, 0, bezel_radius, 0, 2 * Math.PI, false)
+
+                        ctx.lineWidth = bezel_width;
+                        ctx.strokeStyle = Qt.rgba(1, 2, 3, 4)
+                        ctx.stroke();
+
+                        ctx.restore();
+                    }
+                }
+
+                Column {
+                    id: pitchLadder
+
+                    property real indicationUnitSpacing: instrumentDial.radius / 8
+
+                    spacing: 2 * indicationUnitSpacing
+                    
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    rotation: -roll
+
+                    Column {
+                        id: pitchLadderUp
+                        spacing: pitchLadder.indicationUnitSpacing
+
+                        Repeater {
+                            model: ["30", "20", "10"]
+                            delegate: PitchIndicationComponentPositive{}
+                        }
+                    }
+
+                    Column {
+                        id: pitchLadderDown
+                        spacing: pitchLadder.indicationUnitSpacing
+
+                        Repeater {
+                            model: ["10", "20", "30"]
+                            delegate: PitchIndicationComponentNegative{}
+                        }
+                    }
+                }
             }
         }
     }
@@ -183,37 +232,6 @@ Item {
             Rectangle { width: 2 * instrumentDial.width/9; height: 5 }
             Rectangle { width: 5; height: 5 }
             Rectangle { width: 2 * instrumentDial.width/9; height: 5 }
-        }
-    }
-
-    Column {
-        id: pitchLadder
-
-        property real indicationUnitSpacing: instrumentDial.radius / 8
-
-        spacing: 2 * indicationUnitSpacing
-        anchors.horizontalCenter: root.horizontalCenter
-        anchors.verticalCenter: root.verticalCenter
-        rotation: -roll
-
-        Column {
-            id: pitchLadderUp
-            spacing: pitchLadder.indicationUnitSpacing
-
-            Repeater {
-                model: ["30", "20", "10"]
-                delegate: PitchIndicationComponentPositive{}
-            }
-        }
-
-        Column {
-            id: pitchLadderDown
-            spacing: pitchLadder.indicationUnitSpacing
-
-            Repeater {
-                model: ["10", "20", "30"]
-                delegate: PitchIndicationComponentNegative{}
-            }
         }
     }
 
