@@ -67,7 +67,7 @@ Item {
                 ctx.save();
 
                 // Roll
-                ctx.rotate(roll * Math.PI / 180);
+                ctx.rotate(-roll * Math.PI / 180);
 
                 // Pitch
                 ctx.translate(0, calcHorizonShift(pitch));
@@ -112,7 +112,7 @@ Item {
         transform: Rotation {
             origin.x: rollIndicator.width / 2
             origin.y: instrumentDial.height / 2
-            angle: roll
+            angle: -roll
         }
 
         ShapePath {
@@ -194,7 +194,7 @@ Item {
         spacing: 2 * indicationUnitSpacing
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
-        rotation: roll
+        rotation: -roll
 
         Column {
             id: pitchLadderUp
