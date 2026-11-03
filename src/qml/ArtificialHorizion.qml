@@ -29,29 +29,47 @@ Item {
     property real roll: 0.0
     property real pitch: 0.0
 
-
-    onRollChanged: {
-        canvas.requestPaint()
-    }
-
-    onPitchChanged: {
-        canvas.requestPaint()
-    }
-
     Rectangle {
 
         id: instrumentDial
+
         anchors.centerIn: parent
+
         width: Math.min(root.width, root.height) - 40
         height: width
         radius: width/2
 
-        Item {
-            id: attitudeClip
-
+        Shape {
+            id: bezel
             anchors.fill: parent
-            
-            clip: true
+
+            ShapePath {
+                strokeColor: "white"
+                strokeWidth: 10
+                fillColor: "transparent"
+
+                PathAngleArc {
+                    centerX: instrumentDial.width / 2
+                    centerY: instrumentDial.height / 2
+                    radiusX: instrumentDial.width / 2
+                    radiusY: instrumentDial.height / 2
+                    startAngle: 0
+                    sweepAngle: 360
+                }
+            }
+        }
+
+        Item {
+            id: attitudeSource
+
+            width: instrumentDial.width * 3
+            height: instrumentDial.height * 3
+            anchors.centerIn: parent
+
+            // This item is rendered by MultiEffect instead.
+            visible: false
+
+            layer.enabled: true
 
             Item {
                 id: attitudeLayer
@@ -75,16 +93,8 @@ Item {
 
                     onPaint: {
                         var ctx = getContext("2d");
-                        var bezel_width = 10;
-                        var bezel_radius = (canvas.width / 2);
 
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                        // Circular viewport
-                        ctx.save();
-                        ctx.beginPath();
-                        ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2, 0, 2*Math.PI);
-                        ctx.clip();
 
                         // Move origin to centre
                         ctx.translate(canvas.width/2, canvas.height/2);
@@ -98,16 +108,6 @@ Item {
                         // Draw ground
                         ctx.fillStyle = "#A66b26";
                         ctx.fillRect(-canvas.width, 0, canvas.width*2, canvas.height*2);
-
-                        ctx.restore()
-
-                        // Draw bezel
-                        ctx.beginPath();
-                        ctx.arc(0, 0, bezel_radius, 0, 2 * Math.PI, false)
-
-                        ctx.lineWidth = bezel_width;
-                        ctx.strokeStyle = Qt.rgba(1, 2, 3, 4)
-                        ctx.stroke();
 
                         ctx.restore();
                     }
@@ -143,6 +143,39 @@ Item {
                         }
                     }
                 }
+            }
+        }
+
+        // Shows the attitudeSource item through a circular viewport
+        MultiEffect {
+            id: attitudeEffect
+
+            source: attitudeSource
+
+            width: attitudeSource.width
+            height: attitudeSource.height
+            anchors.centerIn: parent
+
+            maskEnabled: true
+            maskSource: circularMask
+        }
+
+        Item {
+            id: circularMask
+
+            width: attitudeSource.width
+            height: attitudeSource.height
+            anchors.centerIn: parent
+            visible: false
+
+            layer.enabled: true
+
+            Rectangle {
+                width: instrumentDial.width
+                height: instrumentDial.height
+                radius: width / 2
+                anchors.centerIn: parent
+                color: "white"
             }
         }
     }
