@@ -28,6 +28,10 @@ Item {
 
     property real roll: 0.0
     property real pitch: 0.0
+    property bool attitudeValid: isFinite(roll)
+        && isFinite(pitch)
+        && pitch >= -90
+        && pitch <= 90
 
     Rectangle {
 
@@ -54,31 +58,11 @@ Item {
         property real pitchLabelMargin: width / 30
         property real pitchLabelFontSize: width / 25
 
-        Shape {
-            id: bezel
-            anchors.fill: parent
-
-            ShapePath {
-                strokeColor: "white"
-                strokeWidth: 10
-                fillColor: "transparent"
-
-                PathAngleArc {
-                    centerX: instrumentDial.width / 2
-                    centerY: instrumentDial.height / 2
-                    radiusX: instrumentDial.width / 2
-                    radiusY: instrumentDial.height / 2
-                    startAngle: 0
-                    sweepAngle: 360
-                }
-            }
-        }
-
         Item {
             id: attitudeSource
 
-            width: instrumentDial.width * 3
-            height: instrumentDial.height * 3
+            width: instrumentDial.width * 4
+            height: instrumentDial.height * 4
             anchors.centerIn: parent
 
             // This item is rendered by MultiEffect instead.
@@ -96,7 +80,7 @@ Item {
                         y: calcHorizonShift(pitch)
                     },
                     Rotation {
-                        angle: -roll
+                        angle: -normalizeRoll(roll)
                         origin.x: attitudeLayer.width / 2
                         origin.y: attitudeLayer.height / 2
                     }
@@ -175,6 +159,15 @@ Item {
             maskSource: circularMask
         }
 
+        Loader {
+            id: failureOverlayLoader
+            sourceComponent: failureOverlay
+            active: !root.attitudeValid
+            width: instrumentDial.width
+            height: instrumentDial.width
+            anchors.centerIn: parent
+        }
+
         Item {
             id: circularMask
 
@@ -191,6 +184,26 @@ Item {
                 radius: width / 2
                 anchors.centerIn: parent
                 color: "white"
+            }
+        }
+
+        Shape {
+            id: bezel
+            anchors.fill: parent
+
+            ShapePath {
+                strokeColor: "white"
+                strokeWidth: 10
+                fillColor: "transparent"
+
+                PathAngleArc {
+                    centerX: instrumentDial.width / 2
+                    centerY: instrumentDial.height / 2
+                    radiusX: instrumentDial.width / 2
+                    radiusY: instrumentDial.height / 2
+                    startAngle: 0
+                    sweepAngle: 360
+                }
             }
         }
     }
@@ -212,7 +225,7 @@ Item {
         transform: Rotation {
             origin.x: rollIndicator.width / 2
             origin.y: instrumentDial.height / 2
-            angle: -roll
+            angle: -normalizeRoll(roll)
         }
 
         ShapePath {
@@ -382,9 +395,53 @@ Item {
         }
     }
 
+    Component {
+        id: failureOverlay
+
+        Item {
+            layer.enabled: true
+
+            property var crossThickness: 5
+
+            Rectangle {
+                anchors.fill: parent
+                color: "black"
+            }
+
+            Rectangle {
+                width: instrumentDial.width
+                height: crossThickness
+                anchors.centerIn: parent
+                rotation: 45
+                color: "red"
+            }
+
+            Rectangle {
+                width: instrumentDial.width
+                height: crossThickness
+                anchors.centerIn: parent
+                rotation: -45
+                color: "red"
+            }
+
+            Text {
+                color: "red"
+                text: "ATTITUDE\nINVALID"
+                font.pixelSize: instrumentDial.width / 16
+                anchors.centerIn: parent
+                anchors.verticalCenterOffset: instrumentDial.width / 4
+                horizontalAlignment: Text.AlignHCenter
+            }
+        }
+    }
+
     function calcHorizonShift (pitch) {
         // pitchLadder.indicationUnitSpacing = 5 degrees pitch (1 pitch line)
 
         return instrumentDial.pixelsPerDegree * pitch
+    }
+
+    function normalizeRoll(angle) {
+        return ((angle + 180) % 360 + 360) % 360 - 180
     }
 }
