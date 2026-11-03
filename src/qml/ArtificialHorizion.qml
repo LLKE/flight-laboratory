@@ -193,7 +193,7 @@ Item {
 
             ShapePath {
                 strokeColor: "white"
-                strokeWidth: 10
+                strokeWidth: 5
                 fillColor: "transparent"
 
                 PathAngleArc {
@@ -211,8 +211,8 @@ Item {
     Shape {
         id: rollIndicator
 
-        width: instrumentDial.width / 14
-        height: instrumentDial.height / 14
+        width: instrumentDial.width * 0.045
+        height: instrumentDial.height * 0.035
 
         anchors {
             top: instrumentDial.top
@@ -229,9 +229,9 @@ Item {
         }
 
         ShapePath {
-            strokeColor: "white"
+            strokeColor: "#252525"
             strokeWidth: 1
-            fillColor: "white"
+            fillColor: "#FFD54A"
 
             startX: rollIndicator.width / 2
             startY: 0
@@ -275,9 +275,9 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.top
 
-                    height: (modelData % 30 === 0) ? 15 : 8
-                    width: (modelData % 30 === 0) ? 5 : 1.5
-                    color: "#ffffff"
+                    height: (modelData % 30 === 0) ? 12 : 7
+                    width: (modelData % 30 === 0) ? 2 : 1
+                    color: "#E6EAF0"
                 }
             }
         }
@@ -293,9 +293,9 @@ Item {
             id: pipperRects
             spacing: instrumentDial.width/18
 
-            Rectangle { width: 2 * instrumentDial.width/9; height: 5 }
-            Rectangle { width: 5; height: 5 }
-            Rectangle { width: 2 * instrumentDial.width/9; height: 5 }
+            Rectangle { width: 2 * instrumentDial.width/9; height: 5; color: "#FFD54A"; border.width: 1; border.color: "#252525" }
+            Rectangle { width: 5; height: 5; color: "#FFD54A"; border.width: 1; border.color: "#252525" }
+            Rectangle { width: 2 * instrumentDial.width/9; height: 5; color: "#FFD54A"; border.width: 1; border.color: "#252525" }
         }
     }
 
