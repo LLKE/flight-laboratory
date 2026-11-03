@@ -39,6 +39,8 @@ Item {
         height: width
         radius: width/2
 
+        property var pixelsPerDegree: radius / 40
+
         Shape {
             id: bezel
             anchors.fill: parent
@@ -116,7 +118,7 @@ Item {
                 Column {
                     id: pitchLadder
 
-                    property real indicationUnitSpacing: instrumentDial.radius / 8
+                    property real indicationUnitSpacing: instrumentDial.pixelsPerDegree * 5
 
                     spacing: 2 * indicationUnitSpacing
                     
@@ -373,6 +375,6 @@ Item {
     function calcHorizonShift (pitch) {
         // pitchLadder.indicationUnitSpacing = 5 degrees pitch (1 pitch line)
 
-        return pitchLadder.indicationUnitSpacing * pitch / 5
+        return instrumentDial.pixelsPerDegree * pitch
     }
 }
