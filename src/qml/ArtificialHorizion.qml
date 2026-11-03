@@ -39,7 +39,20 @@ Item {
         height: width
         radius: width/2
 
-        property var pixelsPerDegree: radius / 40
+        property real pixelsPerDegree: radius / 40
+
+        // Pitch ladder
+        property real pitchMarkSpacing: pixelsPerDegree * 5
+        property real pitchLadderWidth: width / 3
+
+        // Pitch indication lines
+        property real longLineWidth: width * 2 / 9
+        property real shortLineWidth: width / 9
+        property real lineThickness: Math.max(1, width / 300)
+
+        // Pitch labels
+        property real pitchLabelMargin: width / 30
+        property real pitchLabelFontSize: width / 25
 
         Shape {
             id: bezel
@@ -118,7 +131,7 @@ Item {
                 Column {
                     id: pitchLadder
 
-                    property real indicationUnitSpacing: instrumentDial.pixelsPerDegree * 5
+                    property real indicationUnitSpacing: instrumentDial.pitchMarkSpacing
 
                     spacing: 2 * indicationUnitSpacing
                     
@@ -277,8 +290,7 @@ Item {
 
         required property string modelData
 
-        //! Should change with instrument size
-        width: instrumentDial.width / 3
+        width: instrumentDial.pitchLadderWidth
         height: pitchLadder.indicationUnitSpacing
 
         Column {
@@ -288,17 +300,16 @@ Item {
 
             // Long main line
             Rectangle {
-                id: longLine
-                width: 2 * instrumentDial.width / 9
-                height: 1
+                width: instrumentDial.longLineWidth
+                height: instrumentDial.lineThickness
                 color: "white"
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             // Short tick line
             Rectangle {
-                id: shortLine
-                width: instrumentDial.width / 9
-                height: 1
+                width: instrumentDial.shortLineWidth
+                height: instrumentDial.lineThickness
                 color: "white"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
@@ -310,7 +321,7 @@ Item {
             color: "white"
             anchors.verticalCenter: pitchIndicationLines.top
             anchors.right: pitchIndicationLines.left
-            anchors.rightMargin: 10
+            anchors.rightMargin: instrumentDial.pitchLabelMargin
         }
 
         Text {
@@ -319,15 +330,15 @@ Item {
             color: "white"
             anchors.verticalCenter: pitchIndicationLines.top
             anchors.left: pitchIndicationLines.right
-            anchors.leftMargin: 10
+            anchors.leftMargin: instrumentDial.pitchLabelMargin
         }
     }
 
     component PitchIndicationComponentNegative : Item {
 
         required property string modelData
-        //! Should change with instrument size
-        width: instrumentDial.width / 3
+
+        width: instrumentDial.pitchLadderWidth
         height: pitchLadder.indicationUnitSpacing
 
         Column {
@@ -337,19 +348,18 @@ Item {
 
             // Short tick line
             Rectangle {
-                id: shortLine
-                width: instrumentDial.width / 9
-                height: 1
+                width: instrumentDial.shortLineWidth
+                height: instrumentDial.lineThickness
                 color: "white"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
-
+           
             // Long main line
             Rectangle {
-                id: longLine
-                width: 2 * instrumentDial.width / 9
-                height: 1
+                width: instrumentDial.longLineWidth
+                height: instrumentDial.lineThickness
                 color: "white"
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
 
@@ -359,7 +369,7 @@ Item {
             color: "white"
             anchors.verticalCenter: pitchIndicationLines.bottom
             anchors.right: pitchIndicationLines.left
-            anchors.rightMargin: 10
+            anchors.rightMargin: instrumentDial.pitchLabelMargin
         }
 
         Text {
@@ -368,7 +378,7 @@ Item {
             color: "white"
             anchors.verticalCenter: pitchIndicationLines.bottom
             anchors.left: pitchIndicationLines.right
-            anchors.leftMargin: 10
+            anchors.leftMargin: instrumentDial.pitchLabelMargin
         }
     }
 
