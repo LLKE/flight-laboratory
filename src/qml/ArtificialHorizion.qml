@@ -58,6 +58,17 @@ Item {
 
                 anchors.fill: parent
 
+                transform: [
+                    Translate {
+                        y: calcHorizonShift(pitch)
+                    },
+                    Rotation {
+                        angle: -roll
+                        origin.x: attitudeLayer.width / 2
+                        origin.y: attitudeLayer.height / 2
+                    }
+                ]
+
                 Canvas {
                     id: canvas
                     anchors.fill: parent
@@ -79,12 +90,6 @@ Item {
                         ctx.translate(canvas.width/2, canvas.height/2);
 
                         ctx.save();
-
-                        // Roll
-                        ctx.rotate(-roll * Math.PI / 180);
-
-                        // Pitch
-                        ctx.translate(0, calcHorizonShift(pitch));
 
                         // Draw sky
                         ctx.fillStyle = "#0689e4";
@@ -117,8 +122,6 @@ Item {
                     
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-
-                    rotation: -roll
 
                     Column {
                         id: pitchLadderUp
