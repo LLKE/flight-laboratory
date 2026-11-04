@@ -287,15 +287,53 @@ Item {
         id: pipper
         anchors.centerIn: parent
         anchors.horizontalCenterOffset: -pipperRects.width/2
-        anchors.verticalCenterOffset: -pipperRects.height/2
+        anchors.verticalCenterOffset: -pipperCenter.height / 2
 
         Row {
             id: pipperRects
             spacing: instrumentDial.width/18
 
-            Rectangle { width: 2 * instrumentDial.width/9; height: 5; color: "#FFD54A"; border.width: 1; border.color: "#252525" }
-            Rectangle { width: 5; height: 5; color: "#FFD54A"; border.width: 1; border.color: "#252525" }
-            Rectangle { width: 2 * instrumentDial.width/9; height: 5; color: "#FFD54A"; border.width: 1; border.color: "#252525" }
+            Shape {
+                width: 2 * instrumentDial.width / 9
+                height: 10
+
+                ShapePath {
+                    fillColor: "#FFD54A"
+                    strokeColor: "#252525"
+                    strokeWidth: 1
+
+                    startX: 0
+                    startY: 0
+
+                    PathLine { x: 2 * instrumentDial.width / 9; y: 0 }
+                    PathLine { x: 2 * instrumentDial.width / 9; y: 10 }
+                    PathLine { x: 2 * instrumentDial.width / 9 - 5; y: 10 }
+                    PathLine { x: 2 * instrumentDial.width / 9 - 5; y: 5 }
+                    PathLine { x: 0; y: 5 }
+                    PathLine { x: 0; y: 0 }
+                }
+            }
+            Rectangle { id: pipperCenter; width: 5; height: 5; color: "#FFD54A"; border.width: 1; border.color: "#252525" }
+            Shape {
+                width: 2 * instrumentDial.width / 9
+                height: 10
+
+                ShapePath {
+                    fillColor: "#FFD54A"
+                    strokeColor: "#252525"
+                    strokeWidth: 1
+
+                    startX: 0
+                    startY: 0
+
+                    PathLine { x: 2 * instrumentDial.width / 9; y: 0 }
+                    PathLine { x: 2 * instrumentDial.width / 9; y: 5 }
+                    PathLine { x: 5; y: 5 }
+                    PathLine { x: 5; y: 10 }
+                    PathLine { x: 0; y: 10 }
+                    PathLine { x: 0; y: 0 }
+                }
+            }
         }
     }
 
