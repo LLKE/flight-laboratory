@@ -108,6 +108,16 @@ Item {
                         ctx.fillStyle = "#A66b26";
                         ctx.fillRect(-canvas.width, 0, canvas.width*2, canvas.height*2);
 
+                        ctx.strokeStyle = "#D5E0E8";
+                        
+                        // Draw horizon line
+                        ctx.lineWidth = 1.5;
+
+                        ctx.beginPath();
+                        ctx.moveTo(-canvas.width, 0);
+                        ctx.lineTo(canvas.width, 0);
+                        ctx.stroke();
+
                         ctx.restore();
                     }
                 }
@@ -191,9 +201,11 @@ Item {
             id: bezel
             anchors.fill: parent
 
+            // Main bezel
             ShapePath {
-                strokeColor: "white"
-                strokeWidth: 5
+                id: bezelShape
+                strokeColor: "#252A30"
+                strokeWidth: instrumentDial.width * 0.035
                 fillColor: "transparent"
 
                 PathAngleArc {
@@ -201,6 +213,38 @@ Item {
                     centerY: instrumentDial.height / 2
                     radiusX: instrumentDial.width / 2
                     radiusY: instrumentDial.height / 2
+                    startAngle: 0
+                    sweepAngle: 360
+                }
+            }
+
+            // Outer highlight
+            ShapePath {
+                strokeColor: "#59616B"
+                strokeWidth: instrumentDial.width * 0.004
+                fillColor: "transparent"
+
+                PathAngleArc {
+                    centerX: instrumentDial.width / 2
+                    centerY: instrumentDial.height / 2
+                    radiusX: instrumentDial.width / 2 + instrumentDial.width * 0.0175
+                    radiusY: instrumentDial.height / 2 + instrumentDial.width * 0.0175
+                    startAngle: 0
+                    sweepAngle: 360
+                }
+            }
+
+            // Inner separation line
+            ShapePath {
+                strokeColor: "#424951"
+                strokeWidth: instrumentDial.width * 0.004
+                fillColor: "transparent"
+
+                PathAngleArc {
+                    centerX: instrumentDial.width / 2
+                    centerY: instrumentDial.height / 2
+                    radiusX: instrumentDial.width / 2 - instrumentDial.width * 0.0175
+                    radiusY: instrumentDial.height / 2 - instrumentDial.width * 0.0175
                     startAngle: 0
                     sweepAngle: 360
                 }
@@ -275,8 +319,8 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.top
 
-                    height: (modelData % 30 === 0) ? 12 : 7
-                    width: (modelData % 30 === 0) ? 2 : 1
+                    width: (modelData % 30 === 0) ? 0.2 * bezelShape.strokeWidth : 0.1 * bezelShape.strokeWidth
+                    height: (modelData % 30 === 0) ? 1.2 * bezelShape.strokeWidth : 0.8 * bezelShape.strokeWidth
                     color: "#E6EAF0"
                 }
             }
