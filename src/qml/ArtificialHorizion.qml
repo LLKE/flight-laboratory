@@ -3,9 +3,6 @@ import QtQuick.Layouts
 import QtQuick.Effects
 import QtQuick.Shapes
 
-// TODO: Ensure pitch indicator and roll indicator (pitch ladder) are pixel perfect
-// TODO: Understand Canvas
-
 Item {
     id: root
     visible: true
