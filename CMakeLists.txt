@@ -40,6 +40,7 @@ qt_add_qml_module(appFlightLaboratory
         src/qml/ArtificialHorizion.qml
         src/qml/AttitudeGraph.qml
         src/qml/PIDLab.qml
+        src/qml/BasicComponents/LabelledSlider.qml
 
     SOURCES
         src/virtual_pilot/virtual_pilot.h
