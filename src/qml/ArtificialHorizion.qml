@@ -3,80 +3,248 @@ import QtQuick.Layouts
 import QtQuick.Effects
 import QtQuick.Shapes
 
-// TODO: Ensure pitch indicator and roll indicator (pitch ladder) are pixel perfect
-// TODO: Understand Canvas
-
 Item {
     id: root
     visible: true
 
+    /**
+    * Artificial horizon attitude convention:
+    *
+    * roll:
+    *   Degrees.
+    *   Positive = right wing down.
+    *
+    * pitch:
+    *   Degrees.
+    *   Positive = nose up.
+    *
+    * Display convention:
+    *   The aircraft reference remains fixed.
+    *   The attitude background moves relative to it.
+    */
+
     property real roll: 0.0
     property real pitch: 0.0
+    property bool attitudeValid: isFinite(roll)
+        && isFinite(pitch)
+        && pitch >= -90
+        && pitch <= 90
 
     Rectangle {
+
         id: instrumentDial
+
         anchors.centerIn: parent
+
         width: Math.min(root.width, root.height) - 40
         height: width
         radius: width/2
 
-        Canvas {
-            id: canvas
+        property real pixelsPerDegree: radius / 40
+
+        // Pitch ladder
+        property real pitchMarkSpacing: pixelsPerDegree * 5
+        property real pitchLadderWidth: width / 3
+
+        // Pitch indication lines
+        property real longLineWidth: width * 2 / 9
+        property real shortLineWidth: width / 9
+        property real lineThickness: Math.max(1, width / 300)
+
+        // Pitch labels
+        property real pitchLabelMargin: width / 30
+        property real pitchLabelFontSize: width / 25
+
+        Item {
+            id: attitudeSource
+
+            width: instrumentDial.width * 4
+            height: instrumentDial.height * 4
+            anchors.centerIn: parent
+
+            // This item is rendered by MultiEffect instead.
+            visible: false
+
+            layer.enabled: true
+
+            Item {
+                id: attitudeLayer
+
+                anchors.fill: parent
+
+                transform: [
+                    Translate {
+                        y: calcHorizonShift(pitch)
+                    },
+                    Rotation {
+                        angle: -normalizeRoll(roll)
+                        origin.x: attitudeLayer.width / 2
+                        origin.y: attitudeLayer.height / 2
+                    }
+                ]
+
+                Canvas {
+                    id: canvas
+                    anchors.fill: parent
+
+                    onPaint: {
+                        var ctx = getContext("2d");
+
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                        // Move origin to centre
+                        ctx.translate(canvas.width/2, canvas.height/2);
+
+                        ctx.save();
+
+                        // Draw sky
+                        ctx.fillStyle = "#0689e4";
+                        ctx.fillRect(-canvas.width, -canvas.height*2, canvas.width*2, canvas.height*2);
+
+                        // Draw ground
+                        ctx.fillStyle = "#A66b26";
+                        ctx.fillRect(-canvas.width, 0, canvas.width*2, canvas.height*2);
+
+                        ctx.strokeStyle = "#D5E0E8";
+                        
+                        // Draw horizon line
+                        ctx.lineWidth = 1.5;
+
+                        ctx.beginPath();
+                        ctx.moveTo(-canvas.width, 0);
+                        ctx.lineTo(canvas.width, 0);
+                        ctx.stroke();
+
+                        ctx.restore();
+                    }
+                }
+
+                Column {
+                    id: pitchLadder
+
+                    property real indicationUnitSpacing: instrumentDial.pitchMarkSpacing
+
+                    spacing: 2 * indicationUnitSpacing
+                    
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Column {
+                        id: pitchLadderUp
+                        spacing: pitchLadder.indicationUnitSpacing
+
+                        Repeater {
+                            model: ["30", "20", "10"]
+                            delegate: PitchIndicationComponentPositive{}
+                        }
+                    }
+
+                    Column {
+                        id: pitchLadderDown
+                        spacing: pitchLadder.indicationUnitSpacing
+
+                        Repeater {
+                            model: ["10", "20", "30"]
+                            delegate: PitchIndicationComponentNegative{}
+                        }
+                    }
+                }
+            }
+        }
+
+        // Shows the attitudeSource item through a circular viewport
+        MultiEffect {
+            id: attitudeEffect
+
+            source: attitudeSource
+
+            width: attitudeSource.width
+            height: attitudeSource.height
+            anchors.centerIn: parent
+
+            maskEnabled: true
+            maskSource: circularMask
+        }
+
+        Loader {
+            id: failureOverlayLoader
+            sourceComponent: failureOverlay
+            active: !root.attitudeValid
+            width: instrumentDial.width
+            height: instrumentDial.width
+            anchors.centerIn: parent
+        }
+
+        Item {
+            id: circularMask
+
+            width: attitudeSource.width
+            height: attitudeSource.height
+            anchors.centerIn: parent
+            visible: false
+
+            layer.enabled: true
+
+            Rectangle {
+                width: instrumentDial.width
+                height: instrumentDial.height
+                radius: width / 2
+                anchors.centerIn: parent
+                color: "white"
+            }
+        }
+
+        Shape {
+            id: bezel
             anchors.fill: parent
 
-            Timer {
-                interval: 16 // ~60 FPS (1000ms / 60)
-                running: true
-                repeat: true
-                onTriggered: {
-                    // Update your angles here if needed, then request a redraw
-                    canvas.requestPaint()
+            // Main bezel
+            ShapePath {
+                id: bezelShape
+                strokeColor: "#252A30"
+                strokeWidth: instrumentDial.width * 0.035
+                fillColor: "transparent"
+
+                PathAngleArc {
+                    centerX: instrumentDial.width / 2
+                    centerY: instrumentDial.height / 2
+                    radiusX: instrumentDial.width / 2
+                    radiusY: instrumentDial.height / 2
+                    startAngle: 0
+                    sweepAngle: 360
                 }
             }
 
-            onPaint: {
-                var ctx = getContext("2d");
-                var bezel_width = 10;
-                var bezel_radius = (canvas.width / 2);
+            // Outer highlight
+            ShapePath {
+                strokeColor: "#59616B"
+                strokeWidth: instrumentDial.width * 0.004
+                fillColor: "transparent"
 
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                PathAngleArc {
+                    centerX: instrumentDial.width / 2
+                    centerY: instrumentDial.height / 2
+                    radiusX: instrumentDial.width / 2 + instrumentDial.width * 0.0175
+                    radiusY: instrumentDial.height / 2 + instrumentDial.width * 0.0175
+                    startAngle: 0
+                    sweepAngle: 360
+                }
+            }
 
-                // Circular viewport
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2, 0, 2*Math.PI);
-                ctx.clip();
+            // Inner separation line
+            ShapePath {
+                strokeColor: "#424951"
+                strokeWidth: instrumentDial.width * 0.004
+                fillColor: "transparent"
 
-                // Move origin to centre
-                ctx.translate(canvas.width/2, canvas.height/2);
-
-                ctx.save();
-
-                // Roll
-                ctx.rotate(roll * Math.PI / 180);
-
-                // Pitch
-                ctx.translate(0, calcHorizonShift(pitch));
-
-                // Draw sky
-                ctx.fillStyle = "#0689e4";
-                ctx.fillRect(-canvas.width, -canvas.height*2, canvas.width*2, canvas.height*2);
-
-                // Draw ground
-                ctx.fillStyle = "#A66b26";
-                ctx.fillRect(-canvas.width, 0, canvas.width*2, canvas.height*2);
-
-                ctx.restore()
-
-                // Draw bezel
-                ctx.beginPath();
-                ctx.arc(0, 0, bezel_radius, 0, 2 * Math.PI, false)
-
-                ctx.lineWidth = bezel_width;
-                ctx.strokeStyle = Qt.rgba(1, 2, 3, 4)
-                ctx.stroke();
-
-                ctx.restore();
+                PathAngleArc {
+                    centerX: instrumentDial.width / 2
+                    centerY: instrumentDial.height / 2
+                    radiusX: instrumentDial.width / 2 - instrumentDial.width * 0.0175
+                    radiusY: instrumentDial.height / 2 - instrumentDial.width * 0.0175
+                    startAngle: 0
+                    sweepAngle: 360
+                }
             }
         }
     }
@@ -84,8 +252,8 @@ Item {
     Shape {
         id: rollIndicator
 
-        width: instrumentDial.width / 14
-        height: instrumentDial.height / 14
+        width: instrumentDial.width * 0.045
+        height: instrumentDial.height * 0.035
 
         anchors {
             top: instrumentDial.top
@@ -98,13 +266,13 @@ Item {
         transform: Rotation {
             origin.x: rollIndicator.width / 2
             origin.y: instrumentDial.height / 2
-            angle: roll
+            angle: -normalizeRoll(roll)
         }
 
         ShapePath {
-            strokeColor: "white"
+            strokeColor: "#252525"
             strokeWidth: 1
-            fillColor: "white"
+            fillColor: "#FFD54A"
 
             startX: rollIndicator.width / 2
             startY: 0
@@ -148,9 +316,9 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.top
 
-                    height: (modelData % 30 === 0) ? 15 : 8
-                    width: (modelData % 30 === 0) ? 5 : 1.5
-                    color: "#ffffff"
+                    width: (modelData % 30 === 0) ? 0.2 * bezelShape.strokeWidth : 0.1 * bezelShape.strokeWidth
+                    height: (modelData % 30 === 0) ? 1.2 * bezelShape.strokeWidth : 0.8 * bezelShape.strokeWidth
+                    color: "#E6EAF0"
                 }
             }
         }
@@ -160,45 +328,52 @@ Item {
         id: pipper
         anchors.centerIn: parent
         anchors.horizontalCenterOffset: -pipperRects.width/2
-        anchors.verticalCenterOffset: -pipperRects.height/2
+        anchors.verticalCenterOffset: -pipperCenter.height / 2
 
         Row {
             id: pipperRects
             spacing: instrumentDial.width/18
 
-            Rectangle { width: 2 * instrumentDial.width/9; height: 5 }
-            Rectangle { width: 5; height: 5 }
-            Rectangle { width: 2 * instrumentDial.width/9; height: 5 }
-        }
-    }
+            Shape {
+                width: 2 * instrumentDial.width / 9
+                height: 10
 
-    Column {
-        id: pitchLadder
+                ShapePath {
+                    fillColor: "#FFD54A"
+                    strokeColor: "#252525"
+                    strokeWidth: 1
 
-        property real indicationUnitSpacing: instrumentDial.radius / 8
+                    startX: 0
+                    startY: 0
 
-        spacing: 2 * indicationUnitSpacing
-        anchors.horizontalCenter: root.horizontalCenter
-        anchors.verticalCenter: root.verticalCenter
-        rotation: roll
-
-        Column {
-            id: pitchLadderUp
-            spacing: pitchLadder.indicationUnitSpacing
-
-            Repeater {
-                model: ["30", "20", "10"]
-                delegate: PitchIndicationComponentPositive{}
+                    PathLine { x: 2 * instrumentDial.width / 9; y: 0 }
+                    PathLine { x: 2 * instrumentDial.width / 9; y: 10 }
+                    PathLine { x: 2 * instrumentDial.width / 9 - 5; y: 10 }
+                    PathLine { x: 2 * instrumentDial.width / 9 - 5; y: 5 }
+                    PathLine { x: 0; y: 5 }
+                    PathLine { x: 0; y: 0 }
+                }
             }
-        }
+            Rectangle { id: pipperCenter; width: 5; height: 5; color: "#FFD54A"; border.width: 1; border.color: "#252525" }
+            Shape {
+                width: 2 * instrumentDial.width / 9
+                height: 10
 
-        Column {
-            id: pitchLadderDown
-            spacing: pitchLadder.indicationUnitSpacing
+                ShapePath {
+                    fillColor: "#FFD54A"
+                    strokeColor: "#252525"
+                    strokeWidth: 1
 
-            Repeater {
-                model: ["10", "20", "30"]
-                delegate: PitchIndicationComponentNegative{}
+                    startX: 0
+                    startY: 0
+
+                    PathLine { x: 2 * instrumentDial.width / 9; y: 0 }
+                    PathLine { x: 2 * instrumentDial.width / 9; y: 5 }
+                    PathLine { x: 5; y: 5 }
+                    PathLine { x: 5; y: 10 }
+                    PathLine { x: 0; y: 10 }
+                    PathLine { x: 0; y: 0 }
+                }
             }
         }
     }
@@ -207,8 +382,7 @@ Item {
 
         required property string modelData
 
-        //! Should change with instrument size
-        width: instrumentDial.width / 3
+        width: instrumentDial.pitchLadderWidth
         height: pitchLadder.indicationUnitSpacing
 
         Column {
@@ -218,17 +392,16 @@ Item {
 
             // Long main line
             Rectangle {
-                id: longLine
-                width: 2 * instrumentDial.width / 9
-                height: 1
+                width: instrumentDial.longLineWidth
+                height: instrumentDial.lineThickness
                 color: "white"
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             // Short tick line
             Rectangle {
-                id: shortLine
-                width: instrumentDial.width / 9
-                height: 1
+                width: instrumentDial.shortLineWidth
+                height: instrumentDial.lineThickness
                 color: "white"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
@@ -240,7 +413,7 @@ Item {
             color: "white"
             anchors.verticalCenter: pitchIndicationLines.top
             anchors.right: pitchIndicationLines.left
-            anchors.rightMargin: 10
+            anchors.rightMargin: instrumentDial.pitchLabelMargin
         }
 
         Text {
@@ -249,15 +422,15 @@ Item {
             color: "white"
             anchors.verticalCenter: pitchIndicationLines.top
             anchors.left: pitchIndicationLines.right
-            anchors.leftMargin: 10
+            anchors.leftMargin: instrumentDial.pitchLabelMargin
         }
     }
 
     component PitchIndicationComponentNegative : Item {
 
         required property string modelData
-        //! Should change with instrument size
-        width: instrumentDial.width / 3
+
+        width: instrumentDial.pitchLadderWidth
         height: pitchLadder.indicationUnitSpacing
 
         Column {
@@ -267,19 +440,18 @@ Item {
 
             // Short tick line
             Rectangle {
-                id: shortLine
-                width: instrumentDial.width / 9
-                height: 1
+                width: instrumentDial.shortLineWidth
+                height: instrumentDial.lineThickness
                 color: "white"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
-
+           
             // Long main line
             Rectangle {
-                id: longLine
-                width: 2 * instrumentDial.width / 9
-                height: 1
+                width: instrumentDial.longLineWidth
+                height: instrumentDial.lineThickness
                 color: "white"
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
 
@@ -289,7 +461,7 @@ Item {
             color: "white"
             anchors.verticalCenter: pitchIndicationLines.bottom
             anchors.right: pitchIndicationLines.left
-            anchors.rightMargin: 10
+            anchors.rightMargin: instrumentDial.pitchLabelMargin
         }
 
         Text {
@@ -298,13 +470,57 @@ Item {
             color: "white"
             anchors.verticalCenter: pitchIndicationLines.bottom
             anchors.left: pitchIndicationLines.right
-            anchors.leftMargin: 10
+            anchors.leftMargin: instrumentDial.pitchLabelMargin
+        }
+    }
+
+    Component {
+        id: failureOverlay
+
+        Item {
+            layer.enabled: true
+
+            property var crossThickness: 5
+
+            Rectangle {
+                anchors.fill: parent
+                color: "black"
+            }
+
+            Rectangle {
+                width: instrumentDial.width
+                height: crossThickness
+                anchors.centerIn: parent
+                rotation: 45
+                color: "red"
+            }
+
+            Rectangle {
+                width: instrumentDial.width
+                height: crossThickness
+                anchors.centerIn: parent
+                rotation: -45
+                color: "red"
+            }
+
+            Text {
+                color: "red"
+                text: "ATTITUDE\nINVALID"
+                font.pixelSize: instrumentDial.width / 16
+                anchors.centerIn: parent
+                anchors.verticalCenterOffset: instrumentDial.width / 4
+                horizontalAlignment: Text.AlignHCenter
+            }
         }
     }
 
     function calcHorizonShift (pitch) {
         // pitchLadder.indicationUnitSpacing = 5 degrees pitch (1 pitch line)
 
-        return pitchLadder.indicationUnitSpacing * pitch / 5
+        return instrumentDial.pixelsPerDegree * pitch
+    }
+
+    function normalizeRoll(angle) {
+        return ((angle + 180) % 360 + 360) % 360 - 180
     }
 }
