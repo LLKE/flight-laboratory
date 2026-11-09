@@ -10,6 +10,7 @@
 #include <QtQml/qqmlregistration.h>
 
 #include "src/control/loops/control_loop.h"
+#include "param_sets.h"
 
 class FlightSimulation : public QObject
 {
@@ -22,6 +23,10 @@ class FlightSimulation : public QObject
 
 public:
     explicit FlightSimulation(QObject *parent = nullptr);
+
+    // Entry points for controller params from QML
+    Q_INVOKABLE void setPidParams(float kp, float ki, float kd);
+    Q_INVOKABLE void restartSim();
 
     double pitch() const { return _pitch; }
     double dt() const { return _dt; }
@@ -46,6 +51,10 @@ private:
     float _pitch {0.0};
     double _setpoint {0.0};
     QString _controlLoopType {"pid"};
+
+    // TODO: Make controller type agnostic
+    PIDParams _pid_params {1.5f, 0.05f, 0.4f};
+    
     QTimer _simulation_timer;
 };
 

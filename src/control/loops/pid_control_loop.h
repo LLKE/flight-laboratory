@@ -14,6 +14,8 @@ public:
     
     float update(double dt) override;
     float getSetpoint() override;
+    void updateControllerParams(const ControllerParams& params) override;
+    void updateModelParams() override;
 
 private:
 

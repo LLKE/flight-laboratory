@@ -37,15 +37,38 @@ void FlightSimulation::makeControlLoop(const QString &type)
 {
     Q_UNUSED(type);
     _control_loop = std::make_unique<pidControlLoop>();
+    _control_loop->updateControllerParams(ControllerParams{_pid_params});
 }
 
 void FlightSimulation::update()
 {
     if (_control_loop) {
+        //TODO: this can only simulate pitch -> make universal
         const float pitch_value = _control_loop->update(_dt);
         _pitch = pitch_value;
         _setpoint = _control_loop->getSetpoint();
         emit pitchChanged(_pitch);
         emit setpointChanged(_setpoint);
     }
+}
+
+void FlightSimulation::setPidParams(float kp, float ki, float kd)
+{
+    _pid_params = {kp, ki, kd};
+    if (!_control_loop) {
+        return;
+    }
+    
+    _control_loop->updateControllerParams(ControllerParams{_pid_params});
+}
+
+void FlightSimulation::restartSim()
+{
+    _simulation_timer.stop();
+    makeControlLoop(_controlLoopType);
+    _pitch = 0.0f;
+    _setpoint = 0.0;
+    emit pitchChanged(_pitch);
+    emit setpointChanged(_setpoint);
+    _simulation_timer.start();
 }

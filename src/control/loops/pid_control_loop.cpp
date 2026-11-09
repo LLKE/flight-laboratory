@@ -15,3 +15,11 @@ float pidControlLoop::update(double dt) {
 float pidControlLoop::getSetpoint() {
     return _step_pilot.getSetpoint();
 }
+
+void pidControlLoop::updateControllerParams(const ControllerParams& params) {
+    const auto& pid_params = std::get<PIDParams>(params);
+    _pid_controller.setControlParams(pid_params.kp, pid_params.ki, pid_params.kd);
+}
+
+void pidControlLoop::updateModelParams()
+{}

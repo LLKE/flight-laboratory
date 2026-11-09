@@ -11,3 +11,9 @@ void PIDController::calcControlCommand(const float setpoint, const float measure
     _control_command = _p * error + _i * _integral + _d * (error - _error_prev) / dt;
     _error_prev = error;
 }
+
+void PIDController::setControlParams(const float p, const float i, const float d) {
+    _p = p;
+    _i = i;
+    _d = d;
+}

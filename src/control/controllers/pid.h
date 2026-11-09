@@ -11,12 +11,14 @@ public:
     float getControlCommand(const float setpoint, const float actual, const float dt)
         { calcControlCommand(setpoint, actual, dt); return _control_command; };
 
+    void setControlParams(const float p, const float i, const float d);
+
 private:
     void calcControlCommand(const float setpoint, const float measurement, const float dt);
 
-    const float _p;
-    const float _i;
-    const float _d;
+    float _p;
+    float _i;
+    float _d;
 
     const std::vector<float> _actuator_constraints {};
 
