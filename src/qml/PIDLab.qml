@@ -13,6 +13,10 @@ Item {
 
     property var padding: 5
 
+    // TODO: add method to change setpoint magnitude
+    // TODO: add method to change virtual pilot
+    // TODO: Make flight sim controller agnostic
+
     function applyPidParams() {
         flight_sim.setPidParams(
             pSlider.value,
@@ -77,7 +81,8 @@ Item {
                 text: "PID Parameters"
                 font.pixelSize: 15
                 color: "white"
-                anchors.left: parent.left
+                // anchors.left: parent.left
+                anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.margins: root.padding
             }
@@ -104,7 +109,7 @@ Item {
 
                     title: "I"
                     from: 0
-                    to: 1
+                    to: 2.0
                     value: 0.05
 
                     Layout.fillWidth: true
@@ -130,6 +135,12 @@ Item {
                         applyPidParams();
                         restartSim();
                     }
+                }
+
+                Button {
+                    text: "Tuning methods"
+
+                    onClicked: tuningGuide.open()
                 }
 
                 Component.onCompleted: {
@@ -204,5 +215,9 @@ Item {
                 roll: 0
             }
         }
+    }
+
+    PIDTuningGuide {
+        id: tuningGuide
     }
 }

@@ -7,7 +7,7 @@ ColumnLayout {
 
     property string title: "Setting"
     property string unit: ""
-    property int decimals: 1
+    property int decimals: 2
     property alias value: slider.value
     property alias from: slider.from
     property alias to: slider.to
