@@ -1,17 +1,17 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Basic
+import QtQuick.Controls
+import QtQuick.Window
 
 import FlightLaboratory as FL
 
 ApplicationWindow {
     id: window
-    width: 640
-    height: 480
-    minimumWidth: 200
-    minimumHeight: 250
+    visibility: Window.Maximized
     visible: true
     title: qsTr("Flight Laboratory")
+
     property bool lightMode: Application.styleHints.colorScheme === Qt.Light
     property color reallyDark: "#1f1f1f"
     property color dark: "#262626"

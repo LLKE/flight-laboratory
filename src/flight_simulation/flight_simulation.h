@@ -28,6 +28,9 @@ public:
     Q_INVOKABLE void setPidParams(float kp, float ki, float kd);
     Q_INVOKABLE void restartSim();
 
+    // Entry points for virtual pilot manipulation from QML
+    Q_INVOKABLE void setNewSetpointMagnitude(const float magnitude);
+
     double pitch() const { return _pitch; }
     double dt() const { return _dt; }
     double setpoint() const { return _setpoint; }

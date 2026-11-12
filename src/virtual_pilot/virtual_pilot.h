@@ -7,6 +7,7 @@ public:
     VirtualPilot();
     virtual float generateSetpoint(double dt) = 0;
     virtual float getSetpoint() = 0;
+    virtual void setSetpointMagnitude(float magnitude) = 0;
 
 protected:
     float _setpoint {};

@@ -87,7 +87,7 @@ These are used as follows:
 The controller is used inside the PID control loop in `src/control/loops/pid_control_loop.cpp`:
 
 ```cpp
-const float setpoint = _step_pilot.generateSetpoint(dt);
+const float setpoint = _virtual_pilot.generateSetpoint(dt);
 const float measurement = _model.getPrevValue();
 const float control_command = _pid_controller.getControlCommand(setpoint, measurement, dt);
 const float pitch_value = _model.getValue(control_command, dt);

@@ -4,7 +4,8 @@
 pidControlLoop::pidControlLoop(){}
 
 float pidControlLoop::update(double dt) {
-    const float setpoint = _step_pilot.generateSetpoint(dt);
+    
+    const float setpoint = std::visit([dt](auto& pilot) {return pilot.generateSetpoint(dt); }, _virtual_pilot);
     const float measurement = _model.getPrevValue();
     const float control_command = _pid_controller.getControlCommand(setpoint, measurement, dt);
     const float pitch_value = _model.getValue(control_command, dt);
@@ -13,7 +14,7 @@ float pidControlLoop::update(double dt) {
 }
 
 float pidControlLoop::getSetpoint() {
-    return _step_pilot.getSetpoint();
+    return std::visit([](auto& pilot) {return pilot.getSetpoint(); }, _virtual_pilot);
 }
 
 void pidControlLoop::updateControllerParams(const ControllerParams& params) {
@@ -23,3 +24,8 @@ void pidControlLoop::updateControllerParams(const ControllerParams& params) {
 
 void pidControlLoop::updateModelParams()
 {}
+
+VirtualPilotType& pidControlLoop::getVirtualPilot()
+{
+    return _virtual_pilot;
+}

@@ -62,6 +62,16 @@ void FlightSimulation::setPidParams(float kp, float ki, float kd)
     _control_loop->updateControllerParams(ControllerParams{_pid_params});
 }
 
+void FlightSimulation::setNewSetpointMagnitude(const float magnitude)
+{
+    if (!_control_loop) {
+        return;
+    }
+
+    // TODO: Check that the particular virtual pilot's setpoint magnitude can actually be set
+    std::visit([magnitude](auto& pilot) { pilot.setSetpointMagnitude(magnitude); }, _control_loop->getVirtualPilot());
+}
+
 void FlightSimulation::restartSim()
 {
     _simulation_timer.stop();

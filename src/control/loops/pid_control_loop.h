@@ -16,10 +16,11 @@ public:
     float getSetpoint() override;
     void updateControllerParams(const ControllerParams& params) override;
     void updateModelParams() override;
+    VirtualPilotType& getVirtualPilot() override;
 
 private:
 
-    PitchStepPilot _step_pilot {};
+    VirtualPilotType _virtual_pilot { PitchStepPilot {} };
     PIDController _pid_controller {{}, 1.5, 0.05, 0.4};
     PitchModel _model {0.45, 0.5};
 };

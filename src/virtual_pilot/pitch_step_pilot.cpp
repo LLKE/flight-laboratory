@@ -14,3 +14,10 @@ float PitchStepPilot::generateSetpoint(double dt) {
     _setpoint = (_current_time >= _delay) ? _magnitude : 0.0;
     return _setpoint;
 }
+
+void PitchStepPilot::setSetpointMagnitude(float magnitude)
+{
+    if (!magnitude) return;
+
+    _magnitude = magnitude;
+}

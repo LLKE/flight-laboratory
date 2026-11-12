@@ -13,6 +13,8 @@ public:
     
     float getSetpoint() { return _setpoint; }
     float generateSetpoint(double dt) override;
+
+    void setSetpointMagnitude(float magnitude) override;
     
 private: 
     
