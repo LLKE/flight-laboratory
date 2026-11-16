@@ -13,7 +13,7 @@ Item {
 
     property var padding: 5
 
-    // TODO: add fields measuring overshoot, error etc.
+    // TODO: add an error metric
     // TODO: add method to change virtual pilot
     // TODO: make flight sim controller agnostic
     // TODO: Add qmllint and clang pre-commit hooks
@@ -262,6 +262,13 @@ Item {
                     BC.TelemetryDisplay {
                         title: "Pitch"
                         value: flight_sim.pitch
+                        unit: "°"
+                        decimals: 1
+                    }
+
+                    BC.TelemetryDisplay {
+                        title: "Overshoot"
+                        value: flight_sim.overshoot
                         unit: "°"
                         decimals: 1
                     }

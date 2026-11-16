@@ -10,6 +10,8 @@
 #include <QtQml/qqmlregistration.h>
 
 #include "src/control/loops/control_loop.h"
+#include "response_metrics.h"
+#include "virtual_pilot/pitch_step_scenario.h"
 #include "param_sets.h"
 
 class FlightSimulation : public QObject
@@ -17,6 +19,7 @@ class FlightSimulation : public QObject
     Q_OBJECT
     Q_PROPERTY(double pitch READ pitch NOTIFY pitchChanged)
     Q_PROPERTY(double setpoint READ setpoint NOTIFY setpointChanged)
+    Q_PROPERTY(double overshoot READ overshoot NOTIFY overshootChanged)
     Q_PROPERTY(QString controlLoopType READ controlLoopType WRITE setControlLoopType NOTIFY controlLoopTypeChanged)
     Q_PROPERTY(double dt READ dt WRITE setDt NOTIFY dtChanged)
     QML_ELEMENT
@@ -34,6 +37,7 @@ public:
     double pitch() const { return _pitch; }
     double dt() const { return _dt; }
     double setpoint() const { return _setpoint; }
+    double overshoot() const { return _response_metrics.overshoot(); }
     QString controlLoopType() const { return _controlLoopType; }
 
     void setDt(double dt);
@@ -43,6 +47,7 @@ signals:
     void pitchChanged(double newPitch);
     void dtChanged(double newDt);
     void setpointChanged(double newSetpoint);
+    void overshootChanged(double newOvershoot);
     void controlLoopTypeChanged();
 
 private:
@@ -50,10 +55,11 @@ private:
     void makeControlLoop(const QString &type);
 
     std::unique_ptr<ControlLoop> _control_loop;
+    PitchStepScenario _scenario;
+    ResponseMetrics _response_metrics;
     double _dt {0.01};
     float _pitch {0.0};
     double _setpoint {0.0};
-    float _setpoint_magnitude {30.0f};
     QString _controlLoopType {"pid"};
 
     // TODO: Make controller type agnostic

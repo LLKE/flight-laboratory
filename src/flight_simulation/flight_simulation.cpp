@@ -8,6 +8,7 @@ FlightSimulation::FlightSimulation(QObject *parent)
     _simulation_timer.setInterval(_dt * 1000);
     connect(&_simulation_timer, &QTimer::timeout, this, &FlightSimulation::update);
     makeControlLoop(_controlLoopType);
+    _response_metrics.reset(_setpoint);
     _simulation_timer.start();
 }
 
@@ -38,18 +39,17 @@ void FlightSimulation::makeControlLoop(const QString &type)
     Q_UNUSED(type);
     _control_loop = std::make_unique<pidControlLoop>();
     _control_loop->updateControllerParams(ControllerParams{_pid_params});
-    std::visit([this](auto& pilot) {
-        pilot.setSetpointMagnitude(_setpoint_magnitude);
-    }, _control_loop->getVirtualPilot());
 }
 
 void FlightSimulation::update()
 {
     if (_control_loop) {
-        //TODO: this can only simulate pitch -> make universal
-        const float pitch_value = _control_loop->update(_dt);
+        _setpoint = _scenario.advance(_dt);
+        const float pitch_value = _control_loop->update(_setpoint, _dt);
         _pitch = pitch_value;
-        _setpoint = _control_loop->getSetpoint();
+        if (_response_metrics.observe(_setpoint, _pitch)) {
+            emit overshootChanged(_response_metrics.overshoot());
+        }
         emit pitchChanged(_pitch);
         emit setpointChanged(_setpoint);
     }
@@ -67,22 +67,19 @@ void FlightSimulation::setPidParams(float kp, float ki, float kd)
 
 void FlightSimulation::setNewSetpointMagnitude(const float magnitude)
 {
-    _setpoint_magnitude = magnitude;
-    if (!_control_loop) {
-        return;
-    }
-
-    // TODO: Check that the particular virtual pilot's setpoint magnitude can actually be set
-    std::visit([magnitude](auto& pilot) { pilot.setSetpointMagnitude(magnitude); }, _control_loop->getVirtualPilot());
+    _scenario.setSetpointMagnitude(magnitude);
 }
 
 void FlightSimulation::restartSim()
 {
     _simulation_timer.stop();
     makeControlLoop(_controlLoopType);
+    _scenario.reset();
     _pitch = 0.0f;
     _setpoint = 0.0;
+    _response_metrics.reset(_setpoint);
     emit pitchChanged(_pitch);
     emit setpointChanged(_setpoint);
+    emit overshootChanged(_response_metrics.overshoot());
     _simulation_timer.start();
 }

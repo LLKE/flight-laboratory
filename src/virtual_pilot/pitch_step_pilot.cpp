@@ -25,3 +25,9 @@ void PitchStepPilot::setSetpointMagnitude(float magnitude)
 {
     _magnitude = magnitude;
 }
+
+void PitchStepPilot::reset()
+{
+    _current_time = 0.0f;
+    _setpoint = 0.0f;
+}

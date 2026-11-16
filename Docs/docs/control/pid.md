@@ -87,7 +87,6 @@ These are used as follows:
 The controller is used inside the PID control loop in `src/control/loops/pid_control_loop.cpp`:
 
 ```cpp
-const float setpoint = _virtual_pilot.generateSetpoint(dt);
 const float measurement = _model.getPrevValue();
 const float control_command = _pid_controller.getControlCommand(setpoint, measurement, dt);
 const float pitch_value = _model.getValue(control_command, dt);
@@ -95,7 +94,7 @@ const float pitch_value = _model.getValue(control_command, dt);
 
 This means:
 
-1. the [virtual pilot](/Docs/docs/control/virtual-pilot.md) generates a target value,
+1. the simulation scenario generates a target value,
 2. the current model value is measured,
 3. the PID controller computes a corrective signal,
 4. the model updates using that signal.

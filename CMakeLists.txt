@@ -56,6 +56,8 @@ qt_add_qml_module(appFlightLaboratory
         src/virtual_pilot/roll_sin_pilot.cpp
         src/virtual_pilot/pitch_step_pilot.h
         src/virtual_pilot/pitch_step_pilot.cpp
+        src/virtual_pilot/pitch_step_scenario.h
+        src/virtual_pilot/pitch_step_scenario.cpp
 
         src/control/loops/pid_control_loop.h
         src/control/loops/pid_control_loop.cpp
@@ -65,6 +67,8 @@ qt_add_qml_module(appFlightLaboratory
 
         src/flight_simulation/flight_simulation.h
         src/flight_simulation/flight_simulation.cpp
+        src/flight_simulation/response_metrics.h
+        src/flight_simulation/response_metrics.cpp
 
         src/models/pitch_model.h
         src/models/pitch_model.cpp

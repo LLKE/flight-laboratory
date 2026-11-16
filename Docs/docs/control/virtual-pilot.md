@@ -11,7 +11,7 @@ A virtual pilot is a software component that produces a setpoint for a downstrea
 
 The base class stores the latest value in `_setpoint`. The interface uses `float` values, so the meaning and units of a setpoint are established by the consumer. In PID Lab, for example, the pitch control loop uses the pilot's value as the controller target.
 
-`dt` is in seconds in the current simulation. `FlightSimulation` defaults to a `dt` of `0.01` and uses it both to schedule updates and as the timestep passed through the control loop. A pilot should use the supplied timestep rather than assuming a fixed update rate.
+`dt` is in seconds in the current simulation. `FlightSimulation` defaults to a `dt` of `0.01` and uses it both to schedule updates and as the timestep passed through the control loop. The scenario advances its pilot with the supplied timestep, independently of the selected controller.
 
 ## Pitch Step Pilot
 
@@ -19,7 +19,7 @@ The base class stores the latest value in `_setpoint`. The interface uses `float
 
 The default constructor configures a delay of zero and a magnitude of `30`. The two-argument constructor accepts `(delay, magnitude)`. Both values are currently plain floats; the caller is responsible for choosing a delay in seconds and a magnitude in the units expected by its consumer.
 
-The PID control loop calls `generateSetpoint(dt)` once per update, supplies the returned value to the PID controller, then exposes the pilot's current setpoint to the simulation. This keeps setpoint generation separate from control and plant dynamics.
+`PitchStepScenario` owns and advances the step pilot, then supplies its reference to the control loop. The control loop consumes that reference without owning or advancing the scenario, so other controllers can use the same reference source.
 
 ## Adding a Pilot
 

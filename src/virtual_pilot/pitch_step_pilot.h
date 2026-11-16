@@ -15,6 +15,7 @@ public:
     float generateSetpoint(double dt) override;
 
     void setSetpointMagnitude(float magnitude) override;
+    void reset();
     
 private: 
     
