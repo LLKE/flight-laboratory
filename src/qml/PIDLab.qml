@@ -14,10 +14,9 @@ Item {
     property var padding: 5
 
     // TODO: add fields measuring overshoot, error etc.
-    // TODO: add nice colour scheme, and wrap in theme/styling (light/dark) 
     // TODO: add method to change virtual pilot
     // TODO: make flight sim controller agnostic
-
+    // TODO: Add qmllint and clang pre-commit hooks
 
     function applyPidParams(pValue, iValue, dValue) {
         flight_sim.setPidParams(
@@ -257,13 +256,34 @@ Item {
                 }
             }
 
-            ArtificialHorizion {
-                visible: true
-                Layout.fillHeight: true
+            RowLayout {
+                Layout.preferredHeight: root.height / 2
                 Layout.preferredWidth: root.width / 2
 
-                pitch: flight_sim.pitch
-                roll: 0
+                GridLayout {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+
+                    BC.TelemetryDisplay {
+                        title: "Pitch"
+                        value: flight_sim.pitch
+                        unit: "°"
+                        decimals: 1
+
+                        // Layout.fillHeight: true
+                        // Layout.fillWidth: true
+                    }
+                }
+
+                ArtificialHorizion {
+                    visible: true
+
+                    Layout.preferredWidth: parent.width / 2
+                    Layout.preferredHeight: parent.height / 2
+
+                    pitch: flight_sim.pitch
+                    roll: 0
+                }
             }
         }
     }

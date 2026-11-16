@@ -2,6 +2,10 @@
 
 ## UI
 
+### Telemetry Display
+
+`BasicComponents/TelemetryDisplay.qml` is a reusable, framed readout for a numeric telemetry value. Set its `title`, `value`, and `unit` properties; `decimals` controls the displayed precision. It is demonstrated in the PID lab as a live pitch-angle readout.
+
 ### Artificial Horizon
 
 ![Artificial Horizon](media/artificial-horizon.png)

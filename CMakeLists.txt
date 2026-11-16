@@ -46,6 +46,7 @@ qt_add_qml_module(appFlightLaboratory
         src/qml/PIDLab.qml
         src/qml/PIDTuningGuide.qml
         src/qml/BasicComponents/LabelledSlider.qml
+        src/qml/BasicComponents/TelemetryDisplay.qml
         src/qml/Styling/Styling.qml
 
     SOURCES
