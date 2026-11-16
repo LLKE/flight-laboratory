@@ -31,6 +31,10 @@ target_include_directories(appFlightLaboratory PRIVATE
     src/models/
 )
 
+set_source_files_properties(src/qml/Styling/Styling.qml PROPERTIES
+    QT_QML_SINGLETON_TYPE TRUE
+)
+
 qt_add_qml_module(appFlightLaboratory
     URI FlightLaboratory
     VERSION 1.0
@@ -63,10 +67,6 @@ qt_add_qml_module(appFlightLaboratory
 
         src/models/pitch_model.h
         src/models/pitch_model.cpp
-)
-
-set_source_files_properties(Styling.qml PROPERTIES
-    QT_QML_SINGLETON_TYPE TRUE
 )
 
 set_target_properties(appFlightLaboratory PROPERTIES

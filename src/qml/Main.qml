@@ -7,16 +7,15 @@ import QtQuick.Window
 import FlightLaboratory as FL
 
 ApplicationWindow {
-    id: window
+    id: appWindow
     visibility: Window.Maximized
     visible: true
     title: qsTr("Flight Laboratory")
 
-    property bool lightMode: Application.styleHints.colorScheme === Qt.Light
-    property color reallyDark: "#1f1f1f"
-    property color dark: "#262626"
-    property color reallyLight: "#e7e7e7"
-    property color light: "#e0e0e0"
+    width: 1920
+    height: 1080
+
+    color: FL.Styling.backgroundColor
 
     ColumnLayout {
         anchors.fill: parent

@@ -5,9 +5,9 @@ import QtQuick
 QtObject {
     // Colors
     readonly property color primaryColor: "#2196F3"
-    readonly property color backgroundColor: "#272727"
+    readonly property color backgroundColor: "#1b1b1b"
     readonly property color textColor: "#FFFFFF"
-    
+
     // Typography
     readonly property string fontFamily: "Roboto"
     readonly property int fontSizeBody: 14
@@ -16,4 +16,6 @@ QtObject {
     // Layout & Spacing
     readonly property int marginMedium: 16
     readonly property int borderRadius: 8
+
+
 }
