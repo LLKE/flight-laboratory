@@ -19,7 +19,7 @@ The base class stores the latest value in `_setpoint`. The interface uses `float
 
 The default constructor configures a delay of zero and a magnitude of `30`. The two-argument constructor accepts `(delay, magnitude)`. Both values are currently plain floats; the caller is responsible for choosing a delay in seconds and a magnitude in the units expected by its consumer.
 
-`PitchStepScenario` owns and advances the step pilot, then supplies its reference to the control loop. The control loop consumes that reference without owning or advancing the scenario, so other controllers can use the same reference source.
+`Scenario` is the simulation-facing interface for reference generation. A scenario advances with `dt`, returns its reference and any explicit reference-change event, and can be reset and configured. `PitchStepScenario` implements this interface and owns the step pilot. `FlightSimulation` holds a `std::unique_ptr<Scenario>` created by `ScenarioFactory`, and passes each reference to the control loop. This allows other scenario implementations to be selected without changing the simulation or controller code.
 
 ## Adding a Pilot
 

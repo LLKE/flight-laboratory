@@ -11,15 +11,15 @@
 
 #include "src/control/loops/control_loop.h"
 #include "response_metrics.h"
-#include "virtual_pilot/pitch_step_scenario.h"
-#include "param_sets.h"
+#include "scenario.h"
 
 class FlightSimulation : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(double pitch READ pitch NOTIFY pitchChanged)
+    Q_PROPERTY(double response READ response NOTIFY responseChanged)
     Q_PROPERTY(double setpoint READ setpoint NOTIFY setpointChanged)
     Q_PROPERTY(double overshoot READ overshoot NOTIFY overshootChanged)
+    Q_PROPERTY(QString scenarioType READ scenarioType WRITE setScenarioType NOTIFY scenarioTypeChanged)
     Q_PROPERTY(QString controlLoopType READ controlLoopType WRITE setControlLoopType NOTIFY controlLoopTypeChanged)
     Q_PROPERTY(double dt READ dt WRITE setDt NOTIFY dtChanged)
     QML_ELEMENT
@@ -27,27 +27,30 @@ class FlightSimulation : public QObject
 public:
     explicit FlightSimulation(QObject *parent = nullptr);
 
-    // Entry points for controller params from QML
-    Q_INVOKABLE void setPidParams(float kp, float ki, float kd);
+    Q_INVOKABLE bool setControllerParams(const QVariantMap &params);
     Q_INVOKABLE void restartSim();
 
-    // Entry points for virtual pilot manipulation from QML
-    Q_INVOKABLE void setNewSetpointMagnitude(const float magnitude);
+    Q_INVOKABLE bool configureScenario(const QVariantMap &configuration);
 
-    double pitch() const { return _pitch; }
+    double response() const { return _response; }
     double dt() const { return _dt; }
     double setpoint() const { return _setpoint; }
     double overshoot() const { return _response_metrics.overshoot(); }
+    QString scenarioType() const { return _scenario_type; }
     QString controlLoopType() const { return _controlLoopType; }
 
     void setDt(double dt);
+    void setScenarioType(const QString &type);
     void setControlLoopType(const QString &type);
 
 signals:
-    void pitchChanged(double newPitch);
+    void responseChanged(double newResponse);
     void dtChanged(double newDt);
     void setpointChanged(double newSetpoint);
     void overshootChanged(double newOvershoot);
+    void scenarioTypeChanged();
+    void scenarioConfigurationError(const QString &error);
+    void controllerConfigurationError(const QString &error);
     void controlLoopTypeChanged();
 
 private:
@@ -55,15 +58,19 @@ private:
     void makeControlLoop(const QString &type);
 
     std::unique_ptr<ControlLoop> _control_loop;
-    PitchStepScenario _scenario;
+    std::unique_ptr<Scenario> _scenario;
     ResponseMetrics _response_metrics;
     double _dt {0.01};
-    float _pitch {0.0};
+    float _response {0.0};
     double _setpoint {0.0};
+    QString _scenario_type {"pitch-step"};
     QString _controlLoopType {"pid"};
 
-    // TODO: Make controller type agnostic
-    PIDParams _pid_params {1.5f, 0.05f, 0.4f};
+    QVariantMap _controller_params {
+        {QStringLiteral("kp"), 1.5},
+        {QStringLiteral("ki"), 0.05},
+        {QStringLiteral("kd"), 0.4}
+    };
     
     QTimer _simulation_timer;
 };

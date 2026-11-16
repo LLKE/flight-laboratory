@@ -1,6 +1,9 @@
 #include "flight_simulation/flight_simulation.h"
 
+#include <utility>
+
 #include "control/loops/pid_control_loop.h"
+#include "scenario_factory.h"
 
 FlightSimulation::FlightSimulation(QObject *parent)
     : QObject(parent)
@@ -8,7 +11,9 @@ FlightSimulation::FlightSimulation(QObject *parent)
     _simulation_timer.setInterval(_dt * 1000);
     connect(&_simulation_timer, &QTimer::timeout, this, &FlightSimulation::update);
     makeControlLoop(_controlLoopType);
-    _response_metrics.reset(_setpoint);
+    QString error;
+    _scenario = ScenarioFactory::create(_scenario_type, error);
+    _response_metrics.reset();
     _simulation_timer.start();
 }
 
@@ -34,51 +39,94 @@ void FlightSimulation::setControlLoopType(const QString &type)
     emit controlLoopTypeChanged();
 }
 
+void FlightSimulation::setScenarioType(const QString &type)
+{
+    if (_scenario_type == type) {
+        return;
+    }
+
+    QString error;
+    auto scenario = ScenarioFactory::create(type, error);
+    if (!scenario) {
+        emit scenarioConfigurationError(error);
+        return;
+    }
+
+    _scenario = std::move(scenario);
+    _scenario_type = type;
+    emit scenarioTypeChanged();
+    restartSim();
+}
+
 void FlightSimulation::makeControlLoop(const QString &type)
 {
     Q_UNUSED(type);
     _control_loop = std::make_unique<pidControlLoop>();
-    _control_loop->updateControllerParams(ControllerParams{_pid_params});
+    QString error;
+    if (!_control_loop->updateControllerParams(_controller_params, error)) {
+        emit controllerConfigurationError(error);
+    }
 }
 
 void FlightSimulation::update()
 {
-    if (_control_loop) {
-        _setpoint = _scenario.advance(_dt);
-        const float pitch_value = _control_loop->update(_setpoint, _dt);
-        _pitch = pitch_value;
-        if (_response_metrics.observe(_setpoint, _pitch)) {
+    if (_control_loop && _scenario) {
+        const ScenarioSample sample = _scenario->advance(_dt);
+        _setpoint = sample.reference;
+        _response = _control_loop->update(_setpoint, _dt);
+        if (_response_metrics.observe(sample.referenceChange, _response)) {
             emit overshootChanged(_response_metrics.overshoot());
         }
-        emit pitchChanged(_pitch);
+        emit responseChanged(_response);
         emit setpointChanged(_setpoint);
     }
 }
 
-void FlightSimulation::setPidParams(float kp, float ki, float kd)
+bool FlightSimulation::setControllerParams(const QVariantMap &params)
 {
-    _pid_params = {kp, ki, kd};
     if (!_control_loop) {
-        return;
+        const QString error = QStringLiteral("No control loop is configured");
+        emit controllerConfigurationError(error);
+        return false;
     }
-    
-    _control_loop->updateControllerParams(ControllerParams{_pid_params});
+
+    QString error;
+    if (!_control_loop->updateControllerParams(params, error)) {
+        emit controllerConfigurationError(error);
+        return false;
+    }
+
+    _controller_params = params;
+    return true;
 }
 
-void FlightSimulation::setNewSetpointMagnitude(const float magnitude)
+bool FlightSimulation::configureScenario(const QVariantMap &configuration)
 {
-    _scenario.setSetpointMagnitude(magnitude);
+    if (!_scenario) {
+        emit scenarioConfigurationError(QStringLiteral("No scenario is configured"));
+        return false;
+    }
+
+    QString error;
+    if (!_scenario->configure(configuration, error)) {
+        emit scenarioConfigurationError(error);
+        return false;
+    }
+
+    return true;
 }
 
 void FlightSimulation::restartSim()
 {
     _simulation_timer.stop();
     makeControlLoop(_controlLoopType);
-    _scenario.reset();
-    _pitch = 0.0f;
+    if (_scenario) {
+        _scenario->reset();
+    }
+    _response = 0.0f;
     _setpoint = 0.0;
-    _response_metrics.reset(_setpoint);
-    emit pitchChanged(_pitch);
+    _response_metrics.reset();
+    emit responseChanged(_response);
     emit setpointChanged(_setpoint);
     emit overshootChanged(_response_metrics.overshoot());
     _simulation_timer.start();

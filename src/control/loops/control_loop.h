@@ -1,9 +1,8 @@
 #ifndef CONTROL_LOOP_H
 #define CONTROL_LOOP_H
 
-#include "../param_sets.h"
-
-using ControllerParams = PIDParams;
+#include <QString>
+#include <QVariantMap>
 
 class ControlLoop {
 
@@ -12,7 +11,7 @@ public:
 
     virtual float update(float setpoint, double dt) = 0;
 
-    virtual void updateControllerParams(const ControllerParams& params) = 0;
+    virtual bool updateControllerParams(const QVariantMap &params, QString &error) = 0;
     virtual void updateModelParams() = 0;
 };
 

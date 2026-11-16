@@ -69,6 +69,9 @@ qt_add_qml_module(appFlightLaboratory
         src/flight_simulation/flight_simulation.cpp
         src/flight_simulation/response_metrics.h
         src/flight_simulation/response_metrics.cpp
+        src/flight_simulation/scenario.h
+        src/flight_simulation/scenario_factory.h
+        src/flight_simulation/scenario_factory.cpp
 
         src/models/pitch_model.h
         src/models/pitch_model.cpp

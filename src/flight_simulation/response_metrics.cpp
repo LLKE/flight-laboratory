@@ -2,30 +2,33 @@
 
 #include <algorithm>
 
-void ResponseMetrics::reset(double initialReference)
+void ResponseMetrics::reset()
 {
-    _previous_reference = initialReference;
-    _step_target = initialReference;
+    _step_target = 0.0;
     _step_direction = 0.0;
     _overshoot = 0.0;
     _has_step = false;
 }
 
-bool ResponseMetrics::observe(double reference, double response)
+bool ResponseMetrics::observe(const std::optional<ReferenceChange> &referenceChange,
+                              double response)
 {
-    const double previousOvershoot = _overshoot;
-
-    if (reference != _previous_reference) {
-        _step_target = reference;
-        _step_direction = reference > _previous_reference ? 1.0 : -1.0;
+    bool changed = false;
+    if (referenceChange) {
+        _step_target = referenceChange->to;
+        _step_direction = referenceChange->to > referenceChange->from ? 1.0 : -1.0;
         _overshoot = 0.0;
         _has_step = true;
-        _previous_reference = reference;
+        changed = true;
     }
 
     if (_has_step) {
-        _overshoot = std::max(_overshoot, _step_direction * (response - _step_target));
+        const double overshoot = std::max(0.0, _step_direction * (response - _step_target));
+        if (overshoot > _overshoot) {
+            _overshoot = overshoot;
+            changed = true;
+        }
     }
 
-    return _overshoot != previousOvershoot;
+    return changed;
 }

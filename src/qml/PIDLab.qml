@@ -19,15 +19,15 @@ Item {
     // TODO: Add qmllint and clang pre-commit hooks
 
     function applyPidParams(pValue, iValue, dValue) {
-        flight_sim.setPidParams(
-            pValue,
-            iValue,
-            dValue
-        )
+        flight_sim.setControllerParams({
+            kp: pValue,
+            ki: iValue,
+            kd: dValue
+        })
     }
 
     function applySetpointChange(value) {
-        flight_sim.setNewSetpointMagnitude(value)
+        flight_sim.configureScenario({ magnitude: value })
     }
 
     function restartSim() {
@@ -44,16 +44,17 @@ Item {
         controlLoopType: "pid"
         dt: 0.01
 
-        // Create pitch/time datapoint to append to time series
-        onPitchChanged: {
+        // Create response/time datapoint to append to time series
+        onResponseChanged: {
             timeTracker.simTime += flight_sim.dt
-            actualSeries.append(timeTracker.simTime, flight_sim.pitch)
+            actualSeries.append(timeTracker.simTime, flight_sim.response)
             
             // Keep dynamic rolling window
             if (timeTracker.simTime > xAxis.max) {
                 xAxis.min = timeTracker.simTime - 10.0
                 xAxis.max = timeTracker.simTime
             }
+
         }
 
         onSetpointChanged: {
@@ -64,6 +65,14 @@ Item {
                 xAxis.min = timeTracker.simTime - 10.0
                 xAxis.max = timeTracker.simTime
             }
+        }
+    }
+
+    Connections {
+        target: flight_sim
+
+        function onControllerConfigurationError(error) {
+            console.error(error)
         }
     }
 
@@ -261,7 +270,7 @@ Item {
 
                     BC.TelemetryDisplay {
                         title: "Pitch"
-                        value: flight_sim.pitch
+                        value: flight_sim.response
                         unit: "°"
                         decimals: 1
                     }
@@ -280,7 +289,7 @@ Item {
                     Layout.preferredWidth: root.width / 4
                     Layout.preferredHeight: root.height / 4
 
-                    pitch: flight_sim.pitch
+                    pitch: flight_sim.response
                     roll: 0
                 }
             }
