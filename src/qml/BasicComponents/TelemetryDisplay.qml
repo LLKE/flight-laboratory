@@ -10,8 +10,8 @@ Frame {
     property string unit: ""
     property int decimals: 1
 
-    implicitWidth: 180
-    implicitHeight: 110
+    implicitWidth: 100
+    implicitHeight: 80
     padding: 12
 
     ColumnLayout {

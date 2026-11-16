@@ -91,7 +91,6 @@ Item {
                     text: "PID Parameters"
                     font.pixelSize: 15
                     color: "white"
-                    // anchors.left: parent.left
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: parent.top
                     anchors.margins: root.padding
@@ -111,7 +110,6 @@ Item {
                         value: 1.5
 
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
                     }
                     
                     BC.LabelledSlider {
@@ -123,7 +121,6 @@ Item {
                         value: 0.05
 
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
                     }
 
                     BC.LabelledSlider {
@@ -135,7 +132,6 @@ Item {
                         value: 0.4
 
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
                     }
 
                     Button {
@@ -167,7 +163,6 @@ Item {
                     text: "Pitch Setpoint Magnitude"
                     font.pixelSize: 15
                     color: "white"
-                    // anchors.left: parent.left
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: parent.top
                     anchors.margins: root.padding
@@ -183,6 +178,7 @@ Item {
 
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
+                    anchors.right: parent.right
                 }
 
                 Button {
@@ -206,8 +202,8 @@ Item {
 
             Item {
                 id: controlChart
-                Layout.fillHeight: true
                 Layout.preferredWidth: root.width / 2
+                Layout.preferredHeight: root.height / 2
                 Layout.alignment: Qt.AlignRight
                 
                 ChartView {
@@ -261,7 +257,6 @@ Item {
                 Layout.preferredWidth: root.width / 2
 
                 GridLayout {
-                    Layout.fillHeight: true
                     Layout.fillWidth: true
 
                     BC.TelemetryDisplay {
@@ -269,17 +264,14 @@ Item {
                         value: flight_sim.pitch
                         unit: "°"
                         decimals: 1
-
-                        // Layout.fillHeight: true
-                        // Layout.fillWidth: true
                     }
                 }
 
                 ArtificialHorizion {
                     visible: true
 
-                    Layout.preferredWidth: parent.width / 2
-                    Layout.preferredHeight: parent.height / 2
+                    Layout.preferredWidth: root.width / 4
+                    Layout.preferredHeight: root.height / 4
 
                     pitch: flight_sim.pitch
                     roll: 0
