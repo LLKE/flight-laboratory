@@ -13,10 +13,10 @@ Item {
 
     property var padding: 5
 
-    // TODO: add method to change setpoint magnitude
+    // TODO: add fields measuring overshoot, error etc.
+    // TODO: add nice colour scheme, and wrap in theme/styling (light/dark) 
     // TODO: add method to change virtual pilot
     // TODO: make flight sim controller agnostic
-    // TODO: add fields measuring overshoot, error etc.
 
 
     function applyPidParams(pValue, iValue, dValue) {

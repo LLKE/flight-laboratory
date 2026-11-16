@@ -38,6 +38,9 @@ void FlightSimulation::makeControlLoop(const QString &type)
     Q_UNUSED(type);
     _control_loop = std::make_unique<pidControlLoop>();
     _control_loop->updateControllerParams(ControllerParams{_pid_params});
+    std::visit([this](auto& pilot) {
+        pilot.setSetpointMagnitude(_setpoint_magnitude);
+    }, _control_loop->getVirtualPilot());
 }
 
 void FlightSimulation::update()
@@ -64,6 +67,7 @@ void FlightSimulation::setPidParams(float kp, float ki, float kd)
 
 void FlightSimulation::setNewSetpointMagnitude(const float magnitude)
 {
+    _setpoint_magnitude = magnitude;
     if (!_control_loop) {
         return;
     }

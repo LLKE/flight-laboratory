@@ -53,6 +53,7 @@ private:
     double _dt {0.01};
     float _pitch {0.0};
     double _setpoint {0.0};
+    float _setpoint_magnitude {30.0f};
     QString _controlLoopType {"pid"};
 
     // TODO: Make controller type agnostic

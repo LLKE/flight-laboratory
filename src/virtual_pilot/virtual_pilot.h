@@ -1,6 +1,8 @@
 #ifndef VIRTUAL_PILOT_H
 #define VIRTUAL_PILOT_H
 
+#include <iostream>
+
 class VirtualPilot
 {
 public:

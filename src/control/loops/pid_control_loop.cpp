@@ -14,7 +14,7 @@ float pidControlLoop::update(double dt) {
 }
 
 float pidControlLoop::getSetpoint() {
-    return std::visit([](auto& pilot) {return pilot.getSetpoint(); }, _virtual_pilot);
+    return std::visit([](auto& pilot) { return pilot.getSetpoint(); }, _virtual_pilot);
 }
 
 void pidControlLoop::updateControllerParams(const ControllerParams& params) {

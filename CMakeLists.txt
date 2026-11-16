@@ -42,6 +42,7 @@ qt_add_qml_module(appFlightLaboratory
         src/qml/PIDLab.qml
         src/qml/PIDTuningGuide.qml
         src/qml/BasicComponents/LabelledSlider.qml
+        src/qml/Styling/Styling.qml
 
     SOURCES
         src/virtual_pilot/virtual_pilot.h
@@ -62,6 +63,10 @@ qt_add_qml_module(appFlightLaboratory
 
         src/models/pitch_model.h
         src/models/pitch_model.cpp
+)
+
+set_source_files_properties(Styling.qml PROPERTIES
+    QT_QML_SINGLETON_TYPE TRUE
 )
 
 set_target_properties(appFlightLaboratory PROPERTIES
