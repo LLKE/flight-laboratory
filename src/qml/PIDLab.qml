@@ -264,49 +264,72 @@ Item {
                 Layout.preferredWidth: root.width / 2
 
                 GridLayout {
+                    id: telemetryGrid
+
                     Layout.fillWidth: true
                     columns: 2
 
+                    property real uniformTelemetryHeight: Math.max(
+                        pitchTelemetry.implicitHeight,
+                        overshootTelemetry.implicitHeight,
+                        settlingTimeTelemetry.implicitHeight,
+                        steadyStateErrorTelemetry.implicitHeight,
+                        controlEffortTelemetry.implicitHeight,
+                        accumulatedControlEffortTelemetry.implicitHeight
+                    )
+
                     BC.TelemetryDisplay {
+                        id: pitchTelemetry
                         title: "Pitch"
                         value: flight_sim.response
                         unit: "°"
                         decimals: 1
+                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
                     }
 
                     BC.TelemetryDisplay {
+                        id: overshootTelemetry
                         title: "Overshoot"
                         value: flight_sim.overshoot
                         unit: "°"
                         decimals: 1
+                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
                     }
 
                     BC.TelemetryDisplay {
+                        id: settlingTimeTelemetry
                         title: "Settling Time"
                         value: flight_sim.settlingTime
                         unit: "s"
                         decimals: 2
+                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
                     }
 
                     BC.TelemetryDisplay {
+                        id: steadyStateErrorTelemetry
                         title: "Steady State Error"
                         value: flight_sim.steadyStateError
                         unit: "°"
                         decimals: 2
+                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
                     }
 
                     BC.TelemetryDisplay {
+                        id: controlEffortTelemetry
                         title: "Control Effort"
                         value: flight_sim.controlEffort
                         unit: ""
                         decimals: 2
+                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
                     }
 
                     BC.TelemetryDisplay {
+                        id: accumulatedControlEffortTelemetry
                         title: "Accumulated Control Effort"
                         value: flight_sim.accumulatedControlEffort
                         unit: "·s"
                         decimals: 2
+                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
                     }
                 }
 
