@@ -13,6 +13,7 @@ Item {
 
     property var padding: 5
 
+    // TODO: give pitch model output a unit
     // TODO: add method to change virtual pilot
     // TODO: Add qmllint and clang pre-commit hooks
 
@@ -86,22 +87,18 @@ Item {
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: root.height / 10
+            Layout.preferredWidth: root.width / 2
+            Layout.minimumWidth: 0
+            spacing: parent.height / 50
 
-            Frame {
+            BC.TitledFrame {
                 id: controls
-                
+
+                title: "PID Parameters"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-
-                Text {
-                    text: "PID Parameters"
-                    font.pixelSize: 15
-                    color: "white"
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.margins: root.padding
-                }
+                Layout.preferredHeight: root.height / 2
+                Layout.minimumHeight: 0
 
                 ColumnLayout {
                     id: sliders 
@@ -162,18 +159,12 @@ Item {
                 }
             }
 
-            Frame {
+            BC.TitledFrame {
+                title: "Pitch Setpoint Magnitude"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-
-                Text {
-                    text: "Pitch Setpoint Magnitude"
-                    font.pixelSize: 15
-                    color: "white"
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.margins: root.padding
-                }
+                Layout.preferredHeight: root.height / 2
+                Layout.minimumHeight: 0
 
                 BC.LabelledSlider {
                     id: setpointSlider
@@ -181,7 +172,7 @@ Item {
                     title: ""
                     from: 0
                     to: 45
-                    value: 15
+                    value: 45
 
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
@@ -206,12 +197,17 @@ Item {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.preferredWidth: root.width / 2
+            Layout.minimumWidth: 0
+            spacing: parent.height / 50
 
             Item {
                 id: controlChart
-                Layout.preferredWidth: root.width / 2
+                Layout.fillWidth: true
                 Layout.preferredHeight: root.height / 2
-                Layout.alignment: Qt.AlignRight
+                Layout.fillHeight: true
+                Layout.minimumWidth: 0
+                Layout.minimumHeight: 0
                 
                 ChartView {
                     id: chart
@@ -260,76 +256,84 @@ Item {
             }
 
             RowLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 Layout.preferredHeight: root.height / 2
-                Layout.preferredWidth: root.width / 2
+                Layout.minimumWidth: 0
+                Layout.minimumHeight: 0
 
-                GridLayout {
-                    id: telemetryGrid
-
+                BC.TitledFrame {
+                    title: "Telemetry"
+                    Layout.fillHeight: true
                     Layout.fillWidth: true
-                    columns: 2
 
-                    property real uniformTelemetryHeight: Math.max(
-                        pitchTelemetry.implicitHeight,
-                        overshootTelemetry.implicitHeight,
-                        settlingTimeTelemetry.implicitHeight,
-                        steadyStateErrorTelemetry.implicitHeight,
-                        controlEffortTelemetry.implicitHeight,
-                        accumulatedControlEffortTelemetry.implicitHeight
-                    )
+                    GridLayout {
+                        id: telemetryGrid
+                        anchors.fill: parent
+                        columns: 2
 
-                    BC.TelemetryDisplay {
-                        id: pitchTelemetry
-                        title: "Pitch"
-                        value: flight_sim.response
-                        unit: "°"
-                        decimals: 1
-                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
-                    }
+                        property real uniformTelemetryHeight: Math.max(
+                            pitchTelemetry.implicitHeight,
+                            overshootTelemetry.implicitHeight,
+                            settlingTimeTelemetry.implicitHeight,
+                            steadyStateErrorTelemetry.implicitHeight,
+                            controlEffortTelemetry.implicitHeight,
+                            accumulatedControlEffortTelemetry.implicitHeight
+                        )
 
-                    BC.TelemetryDisplay {
-                        id: overshootTelemetry
-                        title: "Overshoot"
-                        value: flight_sim.overshoot
-                        unit: "°"
-                        decimals: 1
-                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
-                    }
+                        BC.TelemetryDisplay {
+                            id: pitchTelemetry
+                            title: "Pitch"
+                            value: flight_sim.response
+                            unit: "°"
+                            decimals: 1
+                            Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
+                        }
 
-                    BC.TelemetryDisplay {
-                        id: settlingTimeTelemetry
-                        title: "Settling Time"
-                        value: flight_sim.settlingTime
-                        unit: "s"
-                        decimals: 2
-                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
-                    }
+                        BC.TelemetryDisplay {
+                            id: overshootTelemetry
+                            title: "Overshoot"
+                            value: flight_sim.overshoot
+                            unit: "°"
+                            decimals: 1
+                            Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
+                        }
 
-                    BC.TelemetryDisplay {
-                        id: steadyStateErrorTelemetry
-                        title: "Steady State Error"
-                        value: flight_sim.steadyStateError
-                        unit: "°"
-                        decimals: 2
-                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
-                    }
+                        BC.TelemetryDisplay {
+                            id: settlingTimeTelemetry
+                            title: "Settling Time"
+                            value: flight_sim.settlingTime
+                            unit: "s"
+                            decimals: 2
+                            Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
+                        }
 
-                    BC.TelemetryDisplay {
-                        id: controlEffortTelemetry
-                        title: "Control Effort"
-                        value: flight_sim.controlEffort
-                        unit: ""
-                        decimals: 2
-                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
-                    }
+                        BC.TelemetryDisplay {
+                            id: steadyStateErrorTelemetry
+                            title: "Steady State Error"
+                            value: flight_sim.steadyStateError
+                            unit: "°"
+                            decimals: 2
+                            Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
+                        }
 
-                    BC.TelemetryDisplay {
-                        id: accumulatedControlEffortTelemetry
-                        title: "Accumulated Control Effort"
-                        value: flight_sim.accumulatedControlEffort
-                        unit: "·s"
-                        decimals: 2
-                        Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
+                        BC.TelemetryDisplay {
+                            id: controlEffortTelemetry
+                            title: "Control Effort"
+                            value: flight_sim.controlEffort
+                            unit: ""
+                            decimals: 2
+                            Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
+                        }
+
+                        BC.TelemetryDisplay {
+                            id: accumulatedControlEffortTelemetry
+                            title: "Accumulated Control Effort"
+                            value: flight_sim.accumulatedControlEffort
+                            unit: "·s"
+                            decimals: 2
+                            Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
+                        }
                     }
                 }
 
