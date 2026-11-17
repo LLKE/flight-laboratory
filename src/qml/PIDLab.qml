@@ -13,10 +13,6 @@ Item {
 
     property var padding: 5
 
-    // TODO: give pitch model output a unit
-    // TODO: add method to change virtual pilot
-    // TODO: Add qmllint and clang pre-commit hooks
-
     function applyPidParams(pValue, iValue, dValue) {
         flight_sim.setControllerParams({
             kp: pValue,
@@ -53,7 +49,6 @@ Item {
                 xAxis.min = timeTracker.simTime - 10.0
                 xAxis.max = timeTracker.simTime
             }
-
         }
 
         onSetpointChanged: {

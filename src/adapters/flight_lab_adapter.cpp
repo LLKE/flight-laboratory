@@ -6,11 +6,11 @@
 #include "control/loops/pid_control_loop.h"
 #include "scenario_factory.h"
 
-FlightSimulation::FlightSimulation(QObject *parent)
+FlightLabAdapter::FlightSimulation(QObject *parent)
     : QObject(parent)
 {
     _simulation_timer.setInterval(_dt * 1000);
-    connect(&_simulation_timer, &QTimer::timeout, this, &FlightSimulation::update);
+    connect(&_simulation_timer, &QTimer::timeout, this, &FlightLabAdapter::update);
     makeControlLoop(_controlLoopType);
     QString error;
     _scenario = ScenarioFactory::create(_scenario_type, error);
@@ -18,7 +18,7 @@ FlightSimulation::FlightSimulation(QObject *parent)
     _simulation_timer.start();
 }
 
-void FlightSimulation::setDt(double dt)
+void FlightLabAdapter::setDt(double dt)
 {
     if (_dt == dt) {
         return;
@@ -29,7 +29,7 @@ void FlightSimulation::setDt(double dt)
     emit dtChanged(_dt);
 }
 
-void FlightSimulation::setControlLoopType(const QString &type)
+void FlightLabAdapter::setControlLoopType(const QString &type)
 {
     if (_controlLoopType == type) {
         return;
@@ -40,7 +40,7 @@ void FlightSimulation::setControlLoopType(const QString &type)
     emit controlLoopTypeChanged();
 }
 
-void FlightSimulation::setScenarioType(const QString &type)
+void FlightLabAdapter::setScenarioType(const QString &type)
 {
     if (_scenario_type == type) {
         return;
@@ -59,7 +59,7 @@ void FlightSimulation::setScenarioType(const QString &type)
     restartSim();
 }
 
-void FlightSimulation::makeControlLoop(const QString &type)
+void FlightLabAdapter::makeControlLoop(const QString &type)
 {
     Q_UNUSED(type);
     _control_loop = std::make_unique<pidControlLoop>();
@@ -69,7 +69,7 @@ void FlightSimulation::makeControlLoop(const QString &type)
     }
 }
 
-void FlightSimulation::update()
+void FlightLabAdapter::update()
 {
     if (_control_loop && _scenario) {
         const ScenarioSample sample = _scenario->advance(_dt);
@@ -92,7 +92,7 @@ void FlightSimulation::update()
     }
 }
 
-bool FlightSimulation::setControllerParams(const QVariantMap &params)
+bool FlightLabAdapter::setControllerParams(const QVariantMap &params)
 {
     if (!_control_loop) {
         const QString error = QStringLiteral("No control loop is configured");
@@ -110,7 +110,7 @@ bool FlightSimulation::setControllerParams(const QVariantMap &params)
     return true;
 }
 
-bool FlightSimulation::configureScenario(const QVariantMap &configuration)
+bool FlightLabAdapter::configureScenario(const QVariantMap &configuration)
 {
     if (!_scenario) {
         emit scenarioConfigurationError(QStringLiteral("No scenario is configured"));
@@ -126,7 +126,7 @@ bool FlightSimulation::configureScenario(const QVariantMap &configuration)
     return true;
 }
 
-void FlightSimulation::restartSim()
+void FlightLabAdapter::restartSim()
 {
     _simulation_timer.stop();
     makeControlLoop(_controlLoopType);
