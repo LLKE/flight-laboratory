@@ -10,7 +10,7 @@ Frame {
     property string unit: ""
     property int decimals: 1
 
-    implicitWidth: 100
+    implicitWidth: 150
     implicitHeight: 80
     padding: 12
 

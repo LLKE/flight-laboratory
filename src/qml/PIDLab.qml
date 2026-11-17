@@ -13,9 +13,7 @@ Item {
 
     property var padding: 5
 
-    // TODO: add an error metric
     // TODO: add method to change virtual pilot
-    // TODO: make flight sim controller agnostic
     // TODO: Add qmllint and clang pre-commit hooks
 
     function applyPidParams(pValue, iValue, dValue) {
@@ -267,6 +265,7 @@ Item {
 
                 GridLayout {
                     Layout.fillWidth: true
+                    columns: 2
 
                     BC.TelemetryDisplay {
                         title: "Pitch"
@@ -280,6 +279,34 @@ Item {
                         value: flight_sim.overshoot
                         unit: "°"
                         decimals: 1
+                    }
+
+                    BC.TelemetryDisplay {
+                        title: "Settling Time"
+                        value: flight_sim.settlingTime
+                        unit: "s"
+                        decimals: 2
+                    }
+
+                    BC.TelemetryDisplay {
+                        title: "Steady State Error"
+                        value: flight_sim.steadyStateError
+                        unit: "°"
+                        decimals: 2
+                    }
+
+                    BC.TelemetryDisplay {
+                        title: "Control Effort"
+                        value: flight_sim.controlEffort
+                        unit: ""
+                        decimals: 2
+                    }
+
+                    BC.TelemetryDisplay {
+                        title: "Accumulated Control Effort"
+                        value: flight_sim.accumulatedControlEffort
+                        unit: "·s"
+                        decimals: 2
                     }
                 }
 

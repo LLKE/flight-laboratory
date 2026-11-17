@@ -19,6 +19,10 @@ class FlightSimulation : public QObject
     Q_PROPERTY(double response READ response NOTIFY responseChanged)
     Q_PROPERTY(double setpoint READ setpoint NOTIFY setpointChanged)
     Q_PROPERTY(double overshoot READ overshoot NOTIFY overshootChanged)
+    Q_PROPERTY(double settlingTime READ settlingTime NOTIFY settlingTimeChanged)
+    Q_PROPERTY(double steadyStateError READ steadyStateError NOTIFY steadyStateErrorChanged)
+    Q_PROPERTY(double controlEffort READ controlEffort NOTIFY controlEffortChanged)
+    Q_PROPERTY(double accumulatedControlEffort READ accumulatedControlEffort NOTIFY accumulatedControlEffortChanged)
     Q_PROPERTY(QString scenarioType READ scenarioType WRITE setScenarioType NOTIFY scenarioTypeChanged)
     Q_PROPERTY(QString controlLoopType READ controlLoopType WRITE setControlLoopType NOTIFY controlLoopTypeChanged)
     Q_PROPERTY(double dt READ dt WRITE setDt NOTIFY dtChanged)
@@ -36,6 +40,10 @@ public:
     double dt() const { return _dt; }
     double setpoint() const { return _setpoint; }
     double overshoot() const { return _response_metrics.overshoot(); }
+    double settlingTime() const { return _response_metrics.settlingTime(); }
+    double steadyStateError() const { return _response_metrics.steadyStateError(); }
+    double controlEffort() const { return _control_effort; }
+    double accumulatedControlEffort() const { return _accumulated_control_effort; }
     QString scenarioType() const { return _scenario_type; }
     QString controlLoopType() const { return _controlLoopType; }
 
@@ -48,6 +56,10 @@ signals:
     void dtChanged(double newDt);
     void setpointChanged(double newSetpoint);
     void overshootChanged(double newOvershoot);
+    void settlingTimeChanged(double newSettlingTime);
+    void steadyStateErrorChanged(double newSteadyStateError);
+    void controlEffortChanged(double newControlEffort);
+    void accumulatedControlEffortChanged(double newAccumulatedControlEffort);
     void scenarioTypeChanged();
     void scenarioConfigurationError(const QString &error);
     void controllerConfigurationError(const QString &error);
@@ -63,6 +75,8 @@ private:
     double _dt {0.01};
     float _response {0.0};
     double _setpoint {0.0};
+    double _control_effort {0.0};
+    double _accumulated_control_effort {0.0};
     QString _scenario_type {"pitch-step"};
     QString _controlLoopType {"pid"};
 

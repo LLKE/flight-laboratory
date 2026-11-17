@@ -1,5 +1,6 @@
 #include "flight_simulation/flight_simulation.h"
 
+#include <cmath>
 #include <utility>
 
 #include "control/loops/pid_control_loop.h"
@@ -74,8 +75,17 @@ void FlightSimulation::update()
         const ScenarioSample sample = _scenario->advance(_dt);
         _setpoint = sample.reference;
         _response = _control_loop->update(_setpoint, _dt);
-        if (_response_metrics.observe(sample.referenceChange, _response)) {
+        const double controlEffort = _control_loop->controlCommand();
+        if (controlEffort != _control_effort) {
+            _control_effort = controlEffort;
+            emit controlEffortChanged(_control_effort);
+        }
+        _accumulated_control_effort += std::abs(controlEffort) * _dt;
+        emit accumulatedControlEffortChanged(_accumulated_control_effort);
+        if (_response_metrics.observe(sample.referenceChange, _response, _dt)) {
             emit overshootChanged(_response_metrics.overshoot());
+            emit settlingTimeChanged(_response_metrics.settlingTime());
+            emit steadyStateErrorChanged(_response_metrics.steadyStateError());
         }
         emit responseChanged(_response);
         emit setpointChanged(_setpoint);
@@ -125,9 +135,15 @@ void FlightSimulation::restartSim()
     }
     _response = 0.0f;
     _setpoint = 0.0;
+    _control_effort = 0.0;
+    _accumulated_control_effort = 0.0;
     _response_metrics.reset();
     emit responseChanged(_response);
     emit setpointChanged(_setpoint);
     emit overshootChanged(_response_metrics.overshoot());
+    emit settlingTimeChanged(_response_metrics.settlingTime());
+    emit steadyStateErrorChanged(_response_metrics.steadyStateError());
+    emit controlEffortChanged(_control_effort);
+    emit accumulatedControlEffortChanged(_accumulated_control_effort);
     _simulation_timer.start();
 }

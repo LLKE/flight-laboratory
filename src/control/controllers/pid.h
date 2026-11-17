@@ -10,6 +10,7 @@ public:
 
     float getControlCommand(const float setpoint, const float actual, const float dt)
         { calcControlCommand(setpoint, actual, dt); return _control_command; };
+    float controlCommand() const { return _control_command; }
 
     void setControlParams(const float p, const float i, const float d);
 

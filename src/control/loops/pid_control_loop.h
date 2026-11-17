@@ -12,6 +12,7 @@ public:
     pidControlLoop();
     
     float update(float setpoint, double dt) override;
+    float controlCommand() const override { return _pid_controller.controlCommand(); }
     bool updateControllerParams(const QVariantMap &params, QString &error) override;
     void updateModelParams() override;
 
