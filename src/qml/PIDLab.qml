@@ -25,6 +25,13 @@ Item {
         pidLabAdapter.configureScenario({ magnitude: value })
     }
 
+    function applyPitchModelParams(pitchDamping, elevatorEffectiveness) {
+        pidLabAdapter.setModelParams({
+            pitch_damping: pitchDamping,
+            elevator_effectiveness: elevatorEffectiveness
+        })
+    }
+
     function restartEngine() {
         pidLabAdapter.restartEngine()
         timeTracker.simTime = 0.0
@@ -32,6 +39,16 @@ Item {
         targetSeries.clear()
         xAxis.min = 0.0
         xAxis.max = 10.0
+    }
+
+    function rerunSimulation() {
+        applyPidParams(pSlider.value, iSlider.value, dSlider.value)
+        applySetpointChange(setpointSlider.value)
+        applyPitchModelParams(
+            pitchDampingSlider.value,
+            elevatorEffectivenessSlider.value
+        )
+        restartEngine()
     }
 
     FL.PidLabAdapter {
@@ -68,6 +85,10 @@ Item {
         function onControllerConfigurationError(error) {
             console.error(error)
         }
+
+        function onModelConfigurationError(error) {
+            console.error(error)
+        }
     }
 
     QtObject {
@@ -78,13 +99,15 @@ Item {
     RowLayout {
 
         anchors.fill: parent
+        anchors.margins: parent.width / 100
+        spacing: parent.width / 100
 
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredWidth: root.width / 2
+            Layout.preferredWidth: root.width / 3
             Layout.minimumWidth: 0
-            spacing: parent.height / 50
+            spacing: parent.height / 100
 
             BC.TitledFrame {
                 id: controls
@@ -92,7 +115,7 @@ Item {
                 title: "PID Parameters"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.preferredHeight: root.height / 2
+                Layout.preferredHeight: 3 * root.height / 7
                 Layout.minimumHeight: 0
 
                 ColumnLayout {
@@ -134,15 +157,6 @@ Item {
                     }
 
                     Button {
-                        text: "Rerun"
-
-                        onClicked: {
-                            applyPidParams(pSlider.value, iSlider.value, dSlider.value);
-                            restartEngine();
-                        }
-                    }
-
-                    Button {
                         text: "Tuning methods"
 
                         onClicked: tuningGuide.open()
@@ -158,7 +172,7 @@ Item {
                 title: "Pitch Setpoint Magnitude"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.preferredHeight: root.height / 2
+                Layout.preferredHeight: root.height / 7
                 Layout.minimumHeight: 0
 
                 BC.LabelledSlider {
@@ -174,25 +188,79 @@ Item {
                     anchors.right: parent.right
                 }
 
-                Button {
-                    text: "Rerun"
+            }
 
-                    anchors.top: setpointSlider.bottom
-                    anchors.topMargin: parent.height / 5
+            BC.TitledFrame {
+                title: "Pitch Model Parameters"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.preferredHeight: 2 * root.height / 7
+                Layout.minimumHeight: 0
 
-                    onClicked: {
-                        applySetpointChange(setpointSlider.value);
-                        restartEngine();
+                ColumnLayout {
+                    anchors.fill: parent
+
+                    BC.LabelledSlider {
+                        id: pitchDampingSlider
+
+                        title: "Pitch damping"
+                        from: 0
+                        to: 2
+                        value: pidLabAdapter.pitchDamping
+                        Layout.fillWidth: true
+                    }
+
+                    BC.LabelledSlider {
+                        id: elevatorEffectivenessSlider
+
+                        title: "Elevator effectiveness"
+                        from: 0
+                        to: 2
+                        value: pidLabAdapter.elevatorEffectiveness
+                        Layout.fillWidth: true
                     }
                 }
             }
+
+            BC.TitledFrame {
+                id: rerunControls
+
+                title: "Controls"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.preferredHeight: root.height / 7
+                Layout.minimumHeight: 0
+
+                RowLayout {
+                    anchors.fill: parent
+
+                    Button {
+                        text: "Rerun"
+                        Layout.alignment: Qt.AlignHCenter
+
+                        onClicked: root.rerunSimulation()
+                    }
+                }
+            }
+        }
+
+
+        ArtificialHorizion {
+            visible: true
+
+            Layout.preferredWidth: root.width / 3
+            Layout.preferredHeight: root.height / 3
+            Layout.margins: -root.width / 50
+
+            pitch: pidLabAdapter.response
+            roll: 0
         }
 
         ColumnLayout {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredWidth: root.width / 2
+            Layout.preferredWidth:  root.width / 3
             Layout.minimumWidth: 0
             spacing: parent.height / 50
 
@@ -203,7 +271,7 @@ Item {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 0
                 Layout.minimumHeight: 0
-                
+
                 ChartView {
                     id: chart
 
@@ -330,16 +398,6 @@ Item {
                             Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
                         }
                     }
-                }
-
-                ArtificialHorizion {
-                    visible: true
-
-                    Layout.preferredWidth: root.width / 4
-                    Layout.preferredHeight: root.height / 4
-
-                    pitch: pidLabAdapter.response
-                    roll: 0
                 }
             }
         }
