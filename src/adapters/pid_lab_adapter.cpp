@@ -64,6 +64,16 @@ QString PidLabAdapter::scenarioType() const
     return scenarioTypeName(_engine->scenarioType());
 }
 
+double PidLabAdapter::pitchDamping() const
+{
+    return _engine->modelParams().at("pitch_damping");
+}
+
+double PidLabAdapter::elevatorEffectiveness() const
+{
+    return _engine->modelParams().at("elevator_effectiveness");
+}
+
 double PidLabAdapter::response() const { return _engine->state().response; }
 double PidLabAdapter::setpoint() const { return _engine->state().setpoint; }
 double PidLabAdapter::overshoot() const { return _engine->state().overshoot; }
@@ -127,6 +137,24 @@ bool PidLabAdapter::setControllerParams(const QVariantMap &params)
         emit controllerConfigurationError(QString::fromStdString(error));
         return false;
     }
+    return true;
+}
+
+bool PidLabAdapter::setModelParams(const QVariantMap &params)
+{
+    ControlModelParams convertedParams;
+    QString conversionError;
+    if (!convertParameters(params, convertedParams, conversionError)) {
+        emit modelConfigurationError(conversionError);
+        return false;
+    }
+
+    std::string error;
+    if (!_engine->setModelParams(convertedParams, error)) {
+        emit modelConfigurationError(QString::fromStdString(error));
+        return false;
+    }
+    emit modelParamsChanged();
     return true;
 }
 

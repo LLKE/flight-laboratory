@@ -9,6 +9,13 @@ public:
     double getValue(const float elevator_deflection, const float timestep) { calc_value(elevator_deflection, timestep); return _state.pitch; };
 
     double getPrevValue() { return _state_prev.pitch; };
+    float pitchDamping() const { return _pitch_damping; }
+    float elevatorEffectiveness() const { return _elevator_effectiveness; }
+    void setPitchDamping(float pitch_damping) { _pitch_damping = pitch_damping; }
+    void setElevatorEffectiveness(float elevator_effectiveness)
+    {
+        _elevator_effectiveness = elevator_effectiveness;
+    }
     void reset();
 
 private:

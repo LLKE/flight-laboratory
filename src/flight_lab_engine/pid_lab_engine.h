@@ -38,6 +38,8 @@ public:
     bool setControlLoopType(ControlLoopType type, std::string &error);
     bool setScenarioType(ScenarioType type, std::string &error);
     bool setControllerParams(const ControlLoopParams &params, std::string &error);
+    bool setModelParams(const ControlModelParams &params, std::string &error);
+    const ControlModelParams &modelParams() const { return _model_params; }
     bool configureScenario(const ScenarioParams &configuration, std::string &error);
 
 private:
@@ -48,6 +50,10 @@ private:
         {"kp", 1.5},
         {"ki", 0.05},
         {"kd", 0.4}
+    };
+    ControlModelParams _model_params {
+        {"pitch_damping", 0.5},
+        {"elevator_effectiveness", 0.45}
     };
     ControlLoopType _controlLoopType {ControlLoopType::Pid};
     ScenarioType _scenarioType {ScenarioType::PitchStep};

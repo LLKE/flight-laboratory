@@ -8,7 +8,6 @@ _delay(0), _magnitude(30)
 PitchStepPilot::PitchStepPilot(float delay, float magnitude) :
 _delay(delay), _magnitude(magnitude)
 {
-    // Check if this class is reinstantiated on the "rerun" button press
     std::cout << "Reinstantiated pitch step pilot with magnitude member: " << _magnitude << "\n";    
 }
 

@@ -15,6 +15,8 @@ class PidLabAdapter : public FlightLabAdapter
                NOTIFY controlLoopTypeChanged)
     Q_PROPERTY(QString scenarioType READ scenarioType WRITE setScenarioType
                NOTIFY scenarioTypeChanged)
+    Q_PROPERTY(double pitchDamping READ pitchDamping NOTIFY modelParamsChanged)
+    Q_PROPERTY(double elevatorEffectiveness READ elevatorEffectiveness NOTIFY modelParamsChanged)
     Q_PROPERTY(double response READ response NOTIFY responseChanged)
     Q_PROPERTY(double setpoint READ setpoint NOTIFY setpointChanged)
     Q_PROPERTY(double overshoot READ overshoot NOTIFY overshootChanged)
@@ -30,6 +32,8 @@ public:
 
     QString controlLoopType() const;
     QString scenarioType() const;
+    double pitchDamping() const;
+    double elevatorEffectiveness() const;
     double response() const;
     double setpoint() const;
     double overshoot() const;
@@ -42,11 +46,13 @@ public:
     void setScenarioType(const QString &type);
 
     Q_INVOKABLE bool setControllerParams(const QVariantMap &params);
+    Q_INVOKABLE bool setModelParams(const QVariantMap &params);
     Q_INVOKABLE bool configureScenario(const QVariantMap &configuration);
 
 signals:
     void controlLoopTypeChanged();
     void scenarioTypeChanged();
+    void modelParamsChanged();
     void responseChanged(double response);
     void setpointChanged(double setpoint);
     void overshootChanged(double overshoot);
@@ -55,6 +61,7 @@ signals:
     void controlEffortChanged(double controlEffort);
     void accumulatedControlEffortChanged(double accumulatedControlEffort);
     void controllerConfigurationError(const QString &error);
+    void modelConfigurationError(const QString &error);
     void scenarioConfigurationError(const QString &error);
 
 private:

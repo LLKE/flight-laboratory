@@ -24,7 +24,8 @@ PidLabEngine::PidLabEngine()
 {
     std::string error;
     _control_loop = createControlLoop(_controlLoopType, error);
-    if (!_control_loop || !_control_loop->updateControllerParams(_controller_params, error)) {
+    if (!_control_loop || !_control_loop->updateControllerParams(_controller_params, error)
+        || !_control_loop->updateModelParams(_model_params, error)) {
         throw std::runtime_error(error);
     }
 
@@ -55,7 +56,8 @@ bool PidLabEngine::setControlLoopType(ControlLoopType type, std::string &error)
     }
 
     auto controlLoop = createControlLoop(type, error);
-    if (!controlLoop || !controlLoop->updateControllerParams(_controller_params, error)) {
+    if (!controlLoop || !controlLoop->updateControllerParams(_controller_params, error)
+        || !controlLoop->updateModelParams(_model_params, error)) {
         return false;
     }
 
@@ -92,6 +94,20 @@ bool PidLabEngine::setControllerParams(const ControlLoopParams &params, std::str
     }
 
     _controller_params = params;
+    return true;
+}
+
+bool PidLabEngine::setModelParams(const ControlModelParams &params, std::string &error)
+{
+    if (!_control_loop) {
+        error = "No control loop is configured";
+        return false;
+    }
+    if (!_control_loop->updateModelParams(params, error)) {
+        return false;
+    }
+
+    _model_params = params;
     return true;
 }
 

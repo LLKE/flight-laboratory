@@ -14,7 +14,7 @@ public:
     float update(float setpoint, double dt) override;
     float controlCommand() const override { return _pid_controller.controlCommand(); }
     bool updateControllerParams(const ControlLoopParams &params, std::string &error) override;
-    void updateModelParams() override;
+    bool updateModelParams(const ControlModelParams &params, std::string &error) override;
     void reset() override;
 
 private:
