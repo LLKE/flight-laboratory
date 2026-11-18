@@ -1,7 +1,7 @@
 #ifndef PITCH_STEP_SCENARIO_H
 #define PITCH_STEP_SCENARIO_H
 
-#include "flight_simulation/scenario.h"
+#include "flight_lab_engine/scenario.h"
 #include "pitch_step_pilot.h"
 
 class PitchStepScenario : public Scenario
@@ -9,7 +9,7 @@ class PitchStepScenario : public Scenario
 public:
     ScenarioSample advance(double dt) override;
     void reset() override;
-    bool configure(const QVariantMap &configuration, QString &error) override;
+    bool configure(const ScenarioParams &configuration, std::string &error) override;
 
 private:
     PitchStepPilot _pilot;

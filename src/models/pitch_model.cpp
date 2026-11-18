@@ -15,3 +15,10 @@ void PitchModel::calc_value(const float elevator_deflection, const float timeste
     _timestep_prev = timestep;
     _state_prev = _state;
 }
+
+void PitchModel::reset()
+{
+    _timestep_prev = 0.0f;
+    _state = {};
+    _state_prev = {};
+}

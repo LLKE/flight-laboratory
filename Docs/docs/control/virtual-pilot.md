@@ -11,7 +11,7 @@ A virtual pilot is a software component that produces a setpoint for a downstrea
 
 The base class stores the latest value in `_setpoint`. The interface uses `float` values, so the meaning and units of a setpoint are established by the consumer. In PID Lab, for example, the pitch control loop uses the pilot's value as the controller target.
 
-`dt` is in seconds in the current simulation. `FlightSimulation` defaults to a `dt` of `0.01` and uses it both to schedule updates and as the timestep passed through the control loop. The scenario advances its pilot with the supplied timestep, independently of the selected controller.
+`dt` is in seconds in the current engine. `FlightLabEngine` defaults to a `dt` of `0.01` and uses it both to schedule updates and as the timestep passed through the control loop. The scenario advances its pilot with the supplied timestep, independently of the selected controller.
 
 ## Pitch Step Pilot
 
@@ -19,7 +19,7 @@ The base class stores the latest value in `_setpoint`. The interface uses `float
 
 The default constructor configures a delay of zero and a magnitude of `30`. The two-argument constructor accepts `(delay, magnitude)`. Both values are currently plain floats; the caller is responsible for choosing a delay in seconds and a magnitude in the units expected by its consumer.
 
-`Scenario` is the simulation-facing interface for reference generation. A scenario advances with `dt`, returns its reference and any explicit reference-change event, and can be reset and configured. `PitchStepScenario` implements this interface and owns the step pilot. `FlightSimulation` holds a `std::unique_ptr<Scenario>` created by `ScenarioFactory`, and passes each reference to the control loop. This allows other scenario implementations to be selected without changing the simulation or controller code.
+`Scenario` is the engine-facing interface for reference generation. A scenario advances with `dt`, returns its reference and any explicit reference-change event, and can be reset and configured. `PitchStepScenario` implements this interface and owns the step pilot. `FlightLabEngine` holds a `std::unique_ptr<Scenario>` created by `ScenarioFactory`, and passes each reference to the control loop. This allows other scenario implementations to be selected without changing the engine or controller code.
 
 ## Adding a Pilot
 

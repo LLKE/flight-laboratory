@@ -9,6 +9,7 @@ public:
     double getValue(const float elevator_deflection, const float timestep) { calc_value(elevator_deflection, timestep); return _state.pitch; };
 
     double getPrevValue() { return _state_prev.pitch; };
+    void reset();
 
 private:
 

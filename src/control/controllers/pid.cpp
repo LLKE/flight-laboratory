@@ -17,3 +17,10 @@ void PIDController::setControlParams(const float p, const float i, const float d
     _i = i;
     _d = d;
 }
+
+void PIDController::reset()
+{
+    _control_command = 0.0f;
+    _error_prev = 0.0f;
+    _integral = 0.0f;
+}

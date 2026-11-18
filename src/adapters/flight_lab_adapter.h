@@ -1,42 +1,44 @@
-#ifndef FLIGHT_SIMULATION_H
-#define FLIGHT_SIMULATION_H
+#ifndef FLIGHT_LAB_ADAPTER_H
+#define FLIGHT_LAB_ADAPTER_H
 
 #include <memory>
 
 #include <QObject>
-#include <QTimer>
 #include <QString>
+#include <QTimer>
 
-#include <QtQml/qqmlregistration.h>
-
-#include "src/control/loops/control_loop.h"
-#include "response_metrics.h"
-#include "scenario.h"
+#include "flight_lab_engine/flight_lab_engine.h"
 
 class FlightLabAdapter : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(double dt READ dt WRITE setDt NOTIFY dtChanged)
-    QML_ELEMENT
 
 public:
-    explicit FlightLabAdapter(QObject *parent = nullptr);
+    explicit FlightLabAdapter(std::unique_ptr<FlightLabEngine> engine,
+                              QObject *parent = nullptr);
 
-    Q_INVOKABLE void restartSim();
+    Q_INVOKABLE void restartEngine();
 
     double dt() const { return _dt; }
-
     void setDt(double dt);
 
 signals:
     void dtChanged(double newDt);
+    void engineError(const QString &error);
+    void engineStepped();
+    void engineReset();
+
+protected:
+    FlightLabEngine &engine() { return *_engine; }
+    void startEngine();
 
 private:
-    void update();
+    void advanceEngine();
 
+    std::unique_ptr<FlightLabEngine> _engine;
+    QTimer _engine_timer;
     double _dt {0.01};
-    
-    QTimer _simulation_timer;
 };
 
-#endif // FLIGHT_SIMULATION_H
+#endif // FLIGHT_LAB_ADAPTER_H

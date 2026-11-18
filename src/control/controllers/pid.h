@@ -13,6 +13,7 @@ public:
     float controlCommand() const { return _control_command; }
 
     void setControlParams(const float p, const float i, const float d);
+    void reset();
 
 private:
     void calcControlCommand(const float setpoint, const float measurement, const float dt);

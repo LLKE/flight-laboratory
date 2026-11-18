@@ -23,7 +23,8 @@ qt_add_executable(appFlightLaboratory
 
 target_include_directories(appFlightLaboratory PRIVATE
     src
-    src/flight_simulation/
+    src/adapters
+    src/flight_lab_engine/
     src/virtual_pilot
     src/control/
     src/control/controllers/
@@ -51,6 +52,11 @@ qt_add_qml_module(appFlightLaboratory
         src/qml/Styling/Styling.qml
 
     SOURCES
+        src/adapters/flight_lab_adapter.h
+        src/adapters/flight_lab_adapter.cpp
+        src/adapters/pid_lab_adapter.h
+        src/adapters/pid_lab_adapter.cpp
+
         src/virtual_pilot/virtual_pilot.h
         src/virtual_pilot/virtual_pilot.cpp
         src/virtual_pilot/roll_sin_pilot.h
@@ -66,13 +72,14 @@ qt_add_qml_module(appFlightLaboratory
         src/control/controllers/pid.cpp
         src/control/controllers/pid.h
 
-        src/flight_simulation/flight_simulation.h
-        src/flight_simulation/flight_simulation.cpp
-        src/flight_simulation/response_metrics.h
-        src/flight_simulation/response_metrics.cpp
-        src/flight_simulation/scenario.h
-        src/flight_simulation/scenario_factory.h
-        src/flight_simulation/scenario_factory.cpp
+        src/flight_lab_engine/flight_lab_engine.h
+        src/flight_lab_engine/pid_lab_engine.h
+        src/flight_lab_engine/pid_lab_engine.cpp
+        src/flight_lab_engine/response_metrics.h
+        src/flight_lab_engine/response_metrics.cpp
+        src/flight_lab_engine/scenario.h
+        src/flight_lab_engine/scenario_factory.h
+        src/flight_lab_engine/scenario_factory.cpp
 
         src/models/pitch_model.h
         src/models/pitch_model.cpp

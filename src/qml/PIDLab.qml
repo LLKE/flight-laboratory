@@ -14,7 +14,7 @@ Item {
     property var padding: 5
 
     function applyPidParams(pValue, iValue, dValue) {
-        flight_sim.setControllerParams({
+        pidLabAdapter.setControllerParams({
             kp: pValue,
             ki: iValue,
             kd: dValue
@@ -22,11 +22,11 @@ Item {
     }
 
     function applySetpointChange(value) {
-        flight_sim.configureScenario({ magnitude: value })
+        pidLabAdapter.configureScenario({ magnitude: value })
     }
 
-    function restartSim() {
-        flight_sim.restartSim()
+    function restartEngine() {
+        pidLabAdapter.restartEngine()
         timeTracker.simTime = 0.0
         actualSeries.clear()
         targetSeries.clear()
@@ -34,15 +34,15 @@ Item {
         xAxis.max = 10.0
     }
 
-    FL.FlightSimulation {
-        id: flight_sim
+    FL.PidLabAdapter {
+        id: pidLabAdapter
         controlLoopType: "pid"
         dt: 0.01
 
         // Create response/time datapoint to append to time series
         onResponseChanged: {
-            timeTracker.simTime += flight_sim.dt
-            actualSeries.append(timeTracker.simTime, flight_sim.response)
+            timeTracker.simTime += pidLabAdapter.dt
+            actualSeries.append(timeTracker.simTime, pidLabAdapter.response)
             
             // Keep dynamic rolling window
             if (timeTracker.simTime > xAxis.max) {
@@ -52,7 +52,7 @@ Item {
         }
 
         onSetpointChanged: {
-            targetSeries.append(timeTracker.simTime, flight_sim.setpoint)
+            targetSeries.append(timeTracker.simTime, pidLabAdapter.setpoint)
             
             // Keep dynamic rolling window
             if (timeTracker.simTime > xAxis.max) {
@@ -63,7 +63,7 @@ Item {
     }
 
     Connections {
-        target: flight_sim
+        target: pidLabAdapter
 
         function onControllerConfigurationError(error) {
             console.error(error)
@@ -138,7 +138,7 @@ Item {
 
                         onClicked: {
                             applyPidParams(pSlider.value, iSlider.value, dSlider.value);
-                            restartSim();
+                            restartEngine();
                         }
                     }
 
@@ -182,7 +182,7 @@ Item {
 
                     onClicked: {
                         applySetpointChange(setpointSlider.value);
-                        restartSim();
+                        restartEngine();
                     }
                 }
             }
@@ -279,7 +279,7 @@ Item {
                         BC.TelemetryDisplay {
                             id: pitchTelemetry
                             title: "Pitch"
-                            value: flight_sim.response
+                            value: pidLabAdapter.response
                             unit: "°"
                             decimals: 1
                             Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
@@ -288,7 +288,7 @@ Item {
                         BC.TelemetryDisplay {
                             id: overshootTelemetry
                             title: "Overshoot"
-                            value: flight_sim.overshoot
+                            value: pidLabAdapter.overshoot
                             unit: "°"
                             decimals: 1
                             Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
@@ -297,7 +297,7 @@ Item {
                         BC.TelemetryDisplay {
                             id: settlingTimeTelemetry
                             title: "Settling Time"
-                            value: flight_sim.settlingTime
+                            value: pidLabAdapter.settlingTime
                             unit: "s"
                             decimals: 2
                             Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
@@ -306,7 +306,7 @@ Item {
                         BC.TelemetryDisplay {
                             id: steadyStateErrorTelemetry
                             title: "Steady State Error"
-                            value: flight_sim.steadyStateError
+                            value: pidLabAdapter.steadyStateError
                             unit: "°"
                             decimals: 2
                             Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
@@ -315,7 +315,7 @@ Item {
                         BC.TelemetryDisplay {
                             id: controlEffortTelemetry
                             title: "Control Effort"
-                            value: flight_sim.controlEffort
+                            value: pidLabAdapter.controlEffort
                             unit: ""
                             decimals: 2
                             Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
@@ -324,7 +324,7 @@ Item {
                         BC.TelemetryDisplay {
                             id: accumulatedControlEffortTelemetry
                             title: "Accumulated Control Effort"
-                            value: flight_sim.accumulatedControlEffort
+                            value: pidLabAdapter.accumulatedControlEffort
                             unit: "·s"
                             decimals: 2
                             Layout.preferredHeight: telemetryGrid.uniformTelemetryHeight
@@ -338,7 +338,7 @@ Item {
                     Layout.preferredWidth: root.width / 4
                     Layout.preferredHeight: root.height / 4
 
-                    pitch: flight_sim.response
+                    pitch: pidLabAdapter.response
                     roll: 0
                 }
             }

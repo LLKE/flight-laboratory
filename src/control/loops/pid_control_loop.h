@@ -13,8 +13,9 @@ public:
     
     float update(float setpoint, double dt) override;
     float controlCommand() const override { return _pid_controller.controlCommand(); }
-    bool updateControllerParams(const QVariantMap &params, QString &error) override;
+    bool updateControllerParams(const ControlLoopParams &params, std::string &error) override;
     void updateModelParams() override;
+    void reset() override;
 
 private:
     PIDController _pid_controller {{}, 1.5, 0.05, 0.4};
