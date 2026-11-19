@@ -27,7 +27,7 @@ ApplicationWindow {
 
             model: [
                 { name: "Start", source: ""},
-                { name: "PID Lab", source: "PIDLab.qml" }
+                { name: "PID Lab", source: "./PIDLab/PIDLab.qml" }
             ]
 
             textRole: "name"

@@ -44,8 +44,10 @@ qt_add_qml_module(appFlightLaboratory
         src/qml/Main.qml
         src/qml/ArtificialHorizion.qml
         src/qml/AttitudeGraph.qml
-        src/qml/PIDLab.qml
-        src/qml/PIDTuningGuide.qml
+        src/qml/PIDLab/PIDLab.qml
+        src/qml/PIDLab/PIDTuningGuide.qml
+        src/qml/PIDLab/PIDControlLoopDisplay.qml
+        src/qml/PIDLab/PIDSignalArrow.qml
         src/qml/BasicComponents/LabelledSlider.qml
         src/qml/BasicComponents/TelemetryDisplay.qml
         src/qml/BasicComponents/TitledFrame.qml

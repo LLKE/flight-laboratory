@@ -6,7 +6,7 @@ import QtCharts
 
 import FlightLaboratory as FL
 
-import "BasicComponents/" as BC
+import "../BasicComponents/" as BC
 
 Item {
     id: root
@@ -244,16 +244,26 @@ Item {
             }
         }
 
-
-        ArtificialHorizion {
-            visible: true
-
+        ColumnLayout {
             Layout.preferredWidth: root.width / 3
-            Layout.preferredHeight: root.height / 3
-            Layout.margins: -root.width / 50
+            Layout.fillHeight: true
+            spacing: parent.height / 50
+            
+            ArtificialHorizion {
+                id: artificialHorizion
+                visible: true
+                pitch: pidLabAdapter.response
+                roll: 0
+                
+                // Layout.margins: -root.width / 50
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
 
-            pitch: pidLabAdapter.response
-            roll: 0
+            PIDControlLoopDisplay {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
         }
 
         ColumnLayout {
