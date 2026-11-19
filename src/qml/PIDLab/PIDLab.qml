@@ -261,6 +261,9 @@ Item {
             }
 
             PIDControlLoopDisplay {
+                kp: pSlider.value
+                ki: iSlider.value
+                kd: dSlider.value
                 Layout.fillWidth: true
                 Layout.fillHeight: true
             }
